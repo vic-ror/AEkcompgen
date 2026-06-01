@@ -1,9 +1,9 @@
 Package: AEkcompgen
-Title: What the Package Does (One Line, Title Case)
+Title: Analysis of Exclusive (and Shared) k-mers for comparative genomics
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Victor Lucas", "Duarte Armani", , "victor.armanix@gmail.com", role = c("aut", "cre"))
+Description: A package to automatize the process of analysing genomic variability using k-mer counting and clustering.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
