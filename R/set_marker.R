@@ -1,4 +1,14 @@
-
+#' Add a marker to a fasta file
+#'
+#' @param fasta A fasta file or the path to one.
+#' @param marker The tag term that will tag the sequences in this file.
+#' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
+#'
+#' @return A dataframe with the collumns "k-mer_id", "sequence" and "tag".
+#' @export
+#'
+#' @examples
+#' marked_file <- set_marker("../fasta.fasta.txt", "Leish")
 
 #Fasta Input
 set_marker <- function(fasta, marker, path_db = NULL) {
