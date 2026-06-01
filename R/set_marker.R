@@ -1,10 +1,5 @@
 
 
-kmer <- read.table("../fasta.fasta.txt")
-kmer_id <- kmer |> filter(str_detect(V1, ">"))
-kmer_seq <- kmer |> filter(str_detect(V1, ">", negate = TRUE))
-kmer_line <- cbind(kmer_id, kmer_seq)
-
 #Fasta Input
 set_marker <- function(fasta, marker, path_db = NULL) {
   #If no databse path is given, it creates a temporary file
@@ -61,4 +56,3 @@ set_marker <- function(fasta, marker, path_db = NULL) {
   return(kmer_line_marked)
 }
 
-marked_file <- set_marker("../fasta.fasta.txt", "Leish")
