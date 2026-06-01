@@ -8,7 +8,20 @@
 #' @export
 #'
 #' @examples
-#' marked_file <- set_marker("../fasta.fasta.txt", "Leish")
+#' # 1. Create temporary fasta file
+#' fasta_temp <- tempfile(fileext = ".fasta")
+#' writeLines(
+#' text = c(
+#' ">seq1", "ATCGATCG",
+#' ">seq2", "TCGATCGA"),
+#' con = fasta_temp
+#' )
+#' # 2. Run function with temporary file
+#' marked_file <- set_marker(fasta_temp, "Leish")
+#' # 3. View result
+#' print(marked_file)
+#' # 4. Delete temporary file
+#' unlink(fasta_temp)
 
 #Fasta Input
 set_marker <- function(fasta, marker, path_db = NULL) {
@@ -31,35 +44,36 @@ set_marker <- function(fasta, marker, path_db = NULL) {
     paste0("CREATE TABLE fasta_table AS SELECT * FROM read_csv_auto('", path_fasta, "', header = FALSE);")) #Creates dataframe from fasta file
 
   #List table
-  fasta.data <- tbl(con, "fasta_table")
+  fasta.data <- dplyr::tbl(con, "fasta_table")
 
   #Add row number
-  fasta_data_row <- fasta.data |> mutate (row_number = row_number())
+  fasta_data_row <- fasta.data |>
+    dplyr::mutate (row_number = dplyr::row_number())
 
   #Transform fasta into a line file
   #Select header
   kmer_id <- fasta_data_row|>
-    filter(str_detect(
-      column0, ">")
+    dplyr::filter(stringr::str_detect(
+      .data$column0, ">")
       ) |>
-    mutate(column0 = str_remove(column0, ">")) |>
-    rename(id = column0)
+    dplyr::mutate(column0 = stringr::str_remove(.data$column0, ">")) |>
+    dplyr::rename(id = .data$column0)
   #Select sequencia
   kmer_seq <- fasta_data_row |>
-    filter(str_detect(
-      column0, ">",
+    dplyr::filter(stringr::str_detect(
+      .data$column0, ">",
       negate = TRUE)
       ) |>
-    rename(seq = column0) |>
-    mutate(row_number = row_number - 1)
+    dplyr::rename(seq = .data$column0) |>
+    dplyr::mutate(row_number = .data$row_number - 1)
   #Join header and sequence
-  kmer_line <- full_join(kmer_id, kmer_seq, by = "row_number")
+  kmer_line <-  dplyr::full_join(kmer_id, kmer_seq, by = "row_number")
 
   #Add Marker
   kmer_line_marked <- kmer_line |>
-    mutate(tag = marker) |>
-    collect() |>
-    select(id, seq, tag)
+    dplyr::mutate(tag = marker) |>
+    dplyr::collect() |>
+    dplyr::select(.data$id, .data$seq, .data$tag)
 
 
   #Save dataframe in the environment

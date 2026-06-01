@@ -10,7 +10,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0.9000
 Imports: 
     DBI,
+    dbplyr,
     dplyr,
     duckdb,
-    stringr,
-    tidyr
+    stringr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

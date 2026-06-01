@@ -20,5 +20,18 @@ A dataframe with the collumns "k-mer_id", "sequence" and "tag".
 Add a marker to a fasta file
 }
 \examples{
-marked_file <- set_marker("../fasta.fasta.txt", "Leish")
+# 1. Create temporary fasta file
+fasta_temp <- tempfile(fileext = ".fasta")
+writeLines(
+text = c(
+">seq1", "ATCGATCG",
+">seq2", "TCGATCGA"),
+con = fasta_temp
+)
+# 2. Run function with temporary file
+marked_file <- set_marker(fasta_temp, "Leish")
+# 3. View result
+print(marked_file)
+# 4. Delete temporary file
+unlink(fasta_temp)
 }
