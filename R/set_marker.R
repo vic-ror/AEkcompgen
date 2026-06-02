@@ -58,6 +58,7 @@ set_marker <- function(fasta, marker, path_db = NULL) {
       ) |>
     dplyr::mutate(column0 = stringr::str_remove(.data$column0, ">")) |>
     dplyr::rename(id = .data$column0)
+
   #Select sequencia
   kmer_seq <- fasta_data_row |>
     dplyr::filter(stringr::str_detect(
@@ -66,6 +67,7 @@ set_marker <- function(fasta, marker, path_db = NULL) {
       ) |>
     dplyr::rename(seq = .data$column0) |>
     dplyr::mutate(row_number = .data$row_number - 1)
+
   #Join header and sequence
   kmer_line <-  dplyr::full_join(kmer_id, kmer_seq, by = "row_number")
 
