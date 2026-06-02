@@ -1,4 +1,4 @@
-#' Add a marker to a fasta file
+#' Selects the exclusive sequences of two files after the set_marker() function
 #'
 #' @param  dataset_1 Dataframe from set_marker() to be compared with dataset_2
 #' @param dataset_2 Dataframe from set_marker() to be compared with dataset_1

@@ -2,7 +2,7 @@
 % Please edit documentation in R/select_exclusive_seq.R
 \name{select_exclusive_seq}
 \alias{select_exclusive_seq}
-\title{Add a marker to a fasta file}
+\title{Selects the exclusive sequences of two files after the set_marker() function}
 \usage{
 select_exclusive_seq(dataset_1, dataset_2, path_db = NULL)
 }
@@ -17,7 +17,7 @@ select_exclusive_seq(dataset_1, dataset_2, path_db = NULL)
 A dataframe containing the exclusive sequences to each marker
 }
 \description{
-Add a marker to a fasta file
+Selects the exclusive sequences of two files after the set_marker() function
 }
 \examples{
 # 1. Create temporary fasta file
