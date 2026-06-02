@@ -78,7 +78,7 @@ set_marker <- function(fasta, marker, path_db = NULL) {
     dplyr::select(.data$id, .data$seq, .data$tag)
 
 
-  #Save dataframe in the environment
+  #Print dataframe content
   return(kmer_line_marked)
 }
 
