@@ -35,8 +35,8 @@ writeLines(c(">seq1", "GCGCGCGC",
 con = fasta_temp2
 )
 # 2. Run set_marker
-marked_df_1 <- set_marker(fasta_temp1, "1")
-marked_df_2 <- set_marker(fasta_temp2, "2")
+marked_df_1 <- set_marker_fasta(fasta_temp1, "1")
+marked_df_2 <- set_marker_fasta(fasta_temp2, "2")
 
 # 3. Run function with temporary file
 exc_seq <- select_exclusive_seq(marked_df_1, marked_df_2)

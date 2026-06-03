@@ -6,6 +6,7 @@
 #'
 #' @return A dataframe with the collumns "k-mer_id", "sequence" and "tag".
 #' @export
+#' @importFrom rlang .data
 #'
 #' @examples
 #' # 1. Create temporary fasta file
@@ -17,14 +18,14 @@
 #' con = fasta_temp
 #' )
 #' # 2. Run function with temporary file
-#' marked_file <- set_marker(fasta_temp, "Leish")
+#' marked_file <- set_marker_fasta(fasta_temp, "Leish")
 #' # 3. View result
 #' print(marked_file)
 #' # 4. Delete temporary file
 #' unlink(fasta_temp)
 
 #Fasta Input
-set_marker <- function(fasta, marker, path_db = NULL) {
+set_marker_fasta <- function(fasta, marker, path_db = NULL) {
   #If no databse path is given, it creates a temporary file
   if (is.null(path_db)) {
     path_db <- tempfile(fileext = ".duckdb")
