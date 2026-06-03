@@ -2,7 +2,7 @@
 % Please edit documentation in R/set_marker_cd_hit.R
 \name{set_markers_cd_hit}
 \alias{set_markers_cd_hit}
-\title{Add a marker to a fasta file}
+\title{Add a marker to a cd-hit output}
 \usage{
 set_markers_cd_hit(input, markers = character(), path_db = NULL)
 }
@@ -17,7 +17,7 @@ set_markers_cd_hit(input, markers = character(), path_db = NULL)
 A dataframe containing the collumns "cluster", "id", "tag".
 }
 \description{
-Add a marker to a fasta file
+Add a marker to a cd-hit output
 }
 \examples{
 # 1. Create temporary fasta file

@@ -1,4 +1,4 @@
-#' Add a marker to a fasta file
+#' Add a marker to a cd-hit output
 #'
 #' @param input A file from cd_hit or formated like one.
 #' @param markers A list of tag term that will tag the clusters within this file.
