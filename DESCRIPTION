@@ -13,6 +13,7 @@ Imports:
     dbplyr,
     dplyr,
     duckdb,
+    glue,
     rlang,
     stringr,
     tidyr
