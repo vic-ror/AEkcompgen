@@ -13,7 +13,7 @@ run_jellyfish(
   upper_count = NULL,
   histo = TRUE,
   path_db = NULL,
-  save_fasta = FALSE
+  output
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ run_jellyfish(
 
 \item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file}
 
-\item{save_fasta}{If you want to save the intermediate files or not}
+\item{output}{Name for output fasta file}
 }
 \value{
 A dataframe containing the counted kmers and their headers with the frequency information
@@ -49,19 +49,14 @@ text = c(
 ">seq2", "AGGGCGACCTTCGATTCGGA",
 ">seq3", "TTTACACACTCTCCTTGGAC",
 ">seq4", "TGTGAACTTTTAAATTCGAT",
-">seq5", "CACTTAAGGCTTGAAAACTA",
-">seq6", "GACGAGACACACTCTTCAAG",
-">seq7", "AGCTGGCTAAGCGCGCGCGC",
-">seq8", "GTTAACGGCAGGTGCAACCC",
-">seq9", "CCGTCAGCGGCCAGGATAGG",
-">seq10", "TCTGCGGGAGCTCTGCGGG"
-),
+">seq5", "CACTTAAGGCTTGAAAACTA"),
 con = fasta_temp
 )
 # 2. Run function with temporary file
-line_file <- run_jellyfish(fasta_temp, path_db =,length =  10, marker = "test", histo = FALSE, save_fasta = FALSE)
+line_file <- run_jellyfish(fasta_temp, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
 # 3. View resulting line dataframe
 print(line_file)
 # 4. Delete temporary file
 unlink(fasta_temp)
+unlink("test_output.fasta")
 }

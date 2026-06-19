@@ -58,7 +58,8 @@ select_shared_seq <- function(dataset_1, dataset_2, path_db = NULL) {
   table_1_shrd <- table_1.data |>
     dplyr::inner_join(table_2.data,
                      by = "seq") |>
-    dplyr::collect()
+    dplyr::collect() |>
+    dplyr::select(seq, id.x, tag.x, id.y, tag.y)
 
   #Print dataframe content
   return(table_1_shrd)
