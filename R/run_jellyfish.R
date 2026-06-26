@@ -1,4 +1,4 @@
-#' Runs jellyfish and gives it's output
+#' Runs jellyfish and give it's output
 #' The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer
 #'
 #' @param fasta_file A fasta file or the path to one.
@@ -21,9 +21,7 @@
 #' text = c(
 #' ">seq1", "GACAGGTACAAGAAGGAGTA",
 #' ">seq2", "AGGGCGACCTTCGATTCGGA",
-#' ">seq3", "TTTACACACTCTCCTTGGAC",
-#' ">seq4", "TGTGAACTTTTAAATTCGAT",
-#' ">seq5", "CACTTAAGGCTTGAAAACTA"),
+#' ">seq3", "TTTACACACTCTCCTTGGAC"),
 #' con = fasta_temp
 #' )
 #' # 2. Run function with temporary file
@@ -33,12 +31,19 @@
 #' # 4. Delete temporary file
 #' unlink(fasta_temp)
 #' unlink("test_output.fasta")
-run_jellyfish <- function(fasta_file, length, marker, lower_count = NULL, upper_count = NULL, histo = TRUE, path_db = NULL, output){
+run_jellyfish <- function(fasta_file,
+                          length,
+                          marker,
+                          lower_count = NULL,
+                          upper_count = NULL,
+                          histo = TRUE,
+                          path_db = NULL,
+                          output){
   #Check if jellyfish and seqkit is installed
   if (Sys.which("jellyfish") == "") {
     stop(
       "ERROR: The program 'jellyfish' was not found in the system/n
-      Please check if it installed and add it to your system's path",
+      Please check if it's installed and add it to your system's path",
       call. = FALSE
     )
   }
@@ -75,9 +80,9 @@ run_jellyfish <- function(fasta_file, length, marker, lower_count = NULL, upper_
   if(histo){
     message("Creating file to generate histogram...")
   if (!dir.exists("analyses")) {
-    dir.create("analyses", recursive = TRUE) #Create directory
+    dir.create("{output}_analyses", recursive = TRUE) #Create directory
   }
-    system(glue::glue("jellyfish histo {marker}.jf > analyses/{marker}.histo")) #Histo archive
+    system(glue::glue("jellyfish histo {marker}.jf > {output}_analyses/{marker}.histo")) #Histo archive
     }
 
   message("Creating readable fasta file...")

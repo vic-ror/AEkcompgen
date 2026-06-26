@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_jellyfish.R
 \name{run_jellyfish}
 \alias{run_jellyfish}
-\title{Runs jellyfish and gives it's output
+\title{Runs jellyfish and give it's output
 The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer}
 \usage{
 run_jellyfish(
@@ -37,7 +37,7 @@ run_jellyfish(
 A dataframe containing the counted kmers and their headers with the frequency information
 }
 \description{
-Runs jellyfish and gives it's output
+Runs jellyfish and give it's output
 The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer
 }
 \examples{
@@ -47,9 +47,7 @@ writeLines(
 text = c(
 ">seq1", "GACAGGTACAAGAAGGAGTA",
 ">seq2", "AGGGCGACCTTCGATTCGGA",
-">seq3", "TTTACACACTCTCCTTGGAC",
-">seq4", "TGTGAACTTTTAAATTCGAT",
-">seq5", "CACTTAAGGCTTGAAAACTA"),
+">seq3", "TTTACACACTCTCCTTGGAC"),
 con = fasta_temp
 )
 # 2. Run function with temporary file
