@@ -79,10 +79,15 @@ run_jellyfish <- function(fasta_file,
   #If histo is true creates a file to generate histogram
   if(histo){
     message("Creating file to generate histogram...")
-  if (!dir.exists("analyses")) {
-    dir.create("{output}_analyses", recursive = TRUE) #Create directory
+  #Get the output path for the output file
+  out_dir <- dirname(output)
+  #Define name of the directory for output hsito file
+  analyses_dir <- file.path(out_dir, "analyses")
+  
+  if (!dir.exists("analyses_dir")) {
+    dir.create("analyses_dir", recursive = TRUE) #Create directory if not existant
   }
-    system(glue::glue("jellyfish histo {marker}.jf > {output}_analyses/{marker}.histo")) #Histo archive
+    system(glue::glue("jellyfish histo {marker}.jf > {analyses_dir}/{marker}.histo")) #Histo archive
     }
 
   message("Creating readable fasta file...")

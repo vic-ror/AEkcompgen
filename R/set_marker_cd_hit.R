@@ -39,7 +39,7 @@ set_markers_cd_hit <- function(input,
   if (is.null(path_db)) {
     path_db <- tempfile(fileext = ".duckdb")
   }
-  # Creates and connects to database
+  #Creates and connects to database
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = path_db)
 
   #Closes the conection after leaving the function
