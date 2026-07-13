@@ -1,9 +1,7 @@
 #' Selects the exclusive sequences of two files after the set_marker() function
 #'
-#' @param  dataset_1 Dataframe from set_marker() to be compared with dataset_2
-#' @param dataset_2 Dataframe from set_marker() to be compared with dataset_1
+#' @param  ...  At least two dataframes containing the header and the seq column
 #' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
-
 #'
 #' @return A dataframe containing the exclusive sequences to each marker
 #' @export
@@ -11,32 +9,25 @@
 #'
 #' @examples
 #' # 1. Create temporary fasta file
-#' fasta_temp1 <- tempfile(fileext = ".fasta")
-#' writeLines(c(">seq1", "ATCGATCG",
-#' ">seq2", "TCGATCGA",
-#' ">seq3", "TCAGTCAG"),
-#' con = fasta_temp1
-#' )
+#' fasta_temp1 <- data.frame(header = c("seq1", "seq2", "seq3", "seq4", "seq5"),
+#'  seq = c("ATCGATCG", "TCGATCGA", "TCAGTCAG", "AATATATA", "TAGGGT"))
 #'
-#' fasta_temp2 <- tempfile(fileext = ".fasta")
-#' writeLines(c(">seq1", "GCGCGCGC",
-#' ">seq2", "TATATATA",
-#' ">seq3", "TCAGTCAG"),
-#' con = fasta_temp2
-#' )
-#' # 2. Run set_marker
-#' marked_df_1 <- set_marker_fasta(fasta_temp1, "1")
-#' marked_df_2 <- set_marker_fasta(fasta_temp2, "2")
-#'
-#' # 3. Run function with temporary file
-#' exc_seq <- select_exclusive_seq(marked_df_1, marked_df_2)
+#' fasta_temp2 <- data.frame(header = c("seq6", "seq7", "seq8", "seq9", "seq10"),
+#'  seq = c("GCGCGCG", "GAGAGAG", "TCTCTCTC", "AATATATA", "TAGGGT"))
+#' # 3. Run function with example dataframes
+#' exc_seq <- select_exclusive_seq(fasta_temp1, fasta_temp2)
 #' # 4. View result
 #' print(exc_seq)
-#' # 5. Delete temporary file
-#' unlink(fasta_temp1)
-#' unlink(fasta_temp2)
 
-select_exclusive_seq <- function(dataset_1, dataset_2, path_db = NULL) {
+select_exclusive_seq <- function(..., path_db = NULL){
+  #Load List
+  data_frame_list <- list(...)
+
+  #Stop function if at least two dataframes were not given
+  if(length(data_frame_list) < 2){
+    stop("Error: This function requires at least two dataframes")
+  }
+
   #If no databse path is given, it creates a temporary file
   if (is.null(path_db)) {
     path_db <- tempfile(fileext = ".duckdb")
@@ -47,24 +38,36 @@ select_exclusive_seq <- function(dataset_1, dataset_2, path_db = NULL) {
   #Closes the conection after leaving the function
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
 
-#load tables on duckdb
-duckdb::duckdb_register(con, "table_1", dataset_1)
-duckdb::duckdb_register(con, "table_2", dataset_2)
 
-table_1.data <- dplyr::tbl(con, "table_1")
-table_2.data <- dplyr::tbl(con, "table_2")
+  #Create loop to append each datraframe into DUCKDB
+  for (df in seq_along(data_frame_list)){
+    table_name <- paste0("temp_df_", df)
 
-#Select exclusive sequences
-table_1_exc <- table_1.data |>
-  dplyr::anti_join(table_2.data,
-                   by = "seq")
-table_2_exc <- table_2.data |>
-  dplyr::anti_join(table_1.data,
-                   by = "seq")
+    #Register each dataframe
+    duckdb::duckdb_register(con, name = table_name, df = data_frame_list[[df]])
 
-tables_merged <- dplyr::union_all(table_1_exc, table_2_exc) |>  dplyr::collect()
+    #If its the first dataframe creates the main table
+    if (df == 1){
+      DBI::dbExecute(con, sprintf("CREATE TABLE merged_table AS SELECT * FROM %s", table_name))
+    }
 
+    #Insert other dataframes into the main table
+    else{
+      DBI::dbExecute(con, sprintf("INSERT INTO merged_table SELECT * FROM %s", table_name))
+    }
+    #Unregister tables
+    duckdb::duckdb_unregister(con, name = table_name)
 
-#Print dataframe content
-return(tables_merged)
+  }
+
+  exclusive_seqs <- dplyr::tbl(con, "merged_table") |>
+    dplyr::group_by(.data$seq) |>
+    dplyr::filter(dplyr::n() == 1) |> #Filter sequences that appear only once = Exclusive
+    dplyr::ungroup() |>
+    dplyr::collect()
+
+  #Unregister table
+
+  return(exclusive_seqs)
+
 }

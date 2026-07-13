@@ -1,6 +1,7 @@
-#' Runs jellyfish and give it's output
+#' Runs jellyfish and give it's output, both in dataframe form and saving it in the directory given in the output argument
 #' The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer
 #'
+#' @param data_frame A dataframe containing the ID and sequence collumns
 #' @param fasta_file A fasta file or the path to one.
 #' @param length The length of kmers that will be counted
 #' @param marker The marker that will be used in the header of sequence and file names
@@ -8,36 +9,30 @@
 #' @param upper_count Don't output k-mers with count higher than this
 #' @param histo Make histogram based on kmer frequency
 #' @param output Name for output fasta file
-#' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
-#' 
 #' @return A dataframe containing the counted kmers and their headers with the frequency information
 #' @importFrom rlang .data
 #' @export
 #'
 #' @examples
 #' # 1. Create temporary fasta file
-#' fasta_temp <- tempfile(fileext = ".fasta")
-#' writeLines(
-#' text = c(
-#' ">seq1", "GACAGGTACAAGAAGGAGTA",
-#' ">seq2", "AGGGCGACCTTCGATTCGGA",
-#' ">seq3", "TTTACACACTCTCCTTGGAC"),
-#' con = fasta_temp
-#' )
+#' data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
+#' seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
 #' # 2. Run function with temporary file
-#' line_file <- run_jellyfish(fasta_temp, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
+#' line_file <- run_jellyfish(data_frame = data_frame_test, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
 #' # 3. View resulting line dataframe
 #' print(line_file)
 #' # 4. Delete temporary file
-#' unlink(fasta_temp)
 #' unlink("test_output.fasta")
-run_jellyfish <- function(fasta_file,
+#'unlink("temp.fasta")
+#'unlink("test.jf")
+#'unlink("temp_jellyfish_dump")
+run_jellyfish <- function(data_frame = NULL,
+                          fasta_file = NULL,
                           length,
                           marker,
                           lower_count = NULL,
                           upper_count = NULL,
                           histo = TRUE,
-                          path_db = NULL,
                           output){
   #Check if jellyfish and seqkit is installed
   if (Sys.which("jellyfish") == "") {
@@ -47,107 +42,121 @@ run_jellyfish <- function(fasta_file,
       call. = FALSE
     )
   }
-  if (Sys.which("seqkit") == "") {
-    stop(
-      "ERROR: The program 'seqkit' was not found in the system/n
-      Please check if it installed and add it to your system's path",
-      call. = FALSE
-    )
+
+  if (!is.null(data_frame) && is.null(fasta_file)){
+    #If only a dataframe is provided create fasta file to run jellyfish
+    message("Creating fasta file to run jellyfish...")
+    temp_fasta <- data_frame |> dplyr::mutate(id = stringr::str_c(">", id)) |>
+      tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
+      dplyr::select(value)
+
+    write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+
+    fasta_file = "temp.fasta"
   }
-  
+
+  #If no dataframe or fasta file was provided
+  else if (is.null(data_frame) && is.null(fasta_file)){
+    stop("A dataframe containing sequence id and sequence OR a fasta file path must be provided")
+  }
+
+  #If both files are provided
+  else if (!is.null(data_frame) && !is.null(fasta_file)){
+    stop("Please provide EITHER a dataframe OR a fasta file, not both.")
+  }
+
+  #Get the output path for the output file
+  out_dir <- dirname(output)
+
   #Run_jellyfish
   #With lower count filter = Prints only kmers with count higher or equal to the filter
   if (!is.null(lower_count) && is.null(upper_count)){
     message(glue::glue("Counting k-mers with count higher or equal to {lower_count}..."))
-    system(glue::glue("jellyfish count -m {length} -L {lower_count} -s 275M -t 10 -C -o {marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -L {lower_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
   }
   #With higher count filter = Prints only kmers with count smaller or equal to the filter
   else if (is.null(lower_count) && !is.null(upper_count)){
     message(glue::glue("Counting k-mers with count smaller or equal to {upper_count}..."))
-    system(glue::glue("jellyfish count -m {length} -U {upper_count} -s 275M -t 10 -C -o {marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -U {upper_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
   }
   #With higher and lower count filter = Prints only kmers with count higher, smaller or equal to the filter
   else if (!is.null(lower_count) && !is.null(upper_count)){
     message(glue::glue("Counting k-mers with count smaller or equal to {upper_count} and higher or equal to {lower_count}..."))
-    system(glue::glue("jellyfish count -m {length} -U {upper_count} -L {lower_count} -s 275M -t 10 -C -o {marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -U {upper_count} -L {lower_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
   }
   #Without count filter
   else {
     message("Counting k-mers without any filters...")
-    system(glue::glue("jellyfish count -m {length} -s 275M -t 10 -C -o {marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
   }
   #If histo is true creates a file to generate histogram
   if(histo){
     message("Creating file to generate histogram...")
-  #Get the output path for the output file
-  out_dir <- dirname(output)
-  #Define name of the directory for output hsito file
+
+  #Define name of the directory for output histo file
   analyses_dir <- file.path(out_dir, "analyses")
-  
-  if (!dir.exists("analyses_dir")) {
-    dir.create("analyses_dir", recursive = TRUE) #Create directory if not existant
+
+  if (!dir.exists(analyses_dir)) {
+    dir.create(analyses_dir, recursive = TRUE) #Create directory if not existant
   }
-    system(glue::glue("jellyfish histo {marker}.jf > {analyses_dir}/{marker}.histo")) #Histo archive
+    system(glue::glue("jellyfish histo {out_dir}/{marker}.jf > {analyses_dir}/{marker}.histo")) #Histo archive
     }
 
   message("Creating readable fasta file...")
-  system(glue::glue("jellyfish dump {marker}.jf > temp"))# turn output into fasta
-  message("Renaming fasta file headers to contain the row number and the count of the kmer...")
-  system(glue::glue("seqkit replace -p '(.+)' -r '{marker}_{{nr}}_$1' temp > {output}")) #Rename from fasta headers
-  
-  #Turn fasta into line
-    #If no databse path is given, it creates a temporary file
-  message("Creating dataframe...")
-  if (is.null(path_db)) {
-    path_db <- tempfile(fileext = ".duckdb")
+  system(glue::glue("jellyfish dump {out_dir}/{marker}.jf > temp_jellyfish_dump"))# turn output into fasta
+
+  message("Renaming fasta file headers to contain the row number and the count of the k-mer...")
+
+  #Function to rename the header
+  rename_kmer_header <- function(jf_readable_file){
+    file <- readLines(jf_readable_file) #Read the file
+
+    #Create arguments
+    current_kmer_id = NULL # Create a string to store the current k-mer id
+    line_number = 0       #Create a argument to store the line number
+    kmer_id_list = c()    #Create a list to store k-mer ids
+    kmer_seq_list = c()   #Create a list to store k-mer sequences
+
+
+    for(line in file) {
+      if (startsWith(line, ">")){           #If it is the header
+        line_number = line_number + 1       #Add one to kmer_number
+        current_kmer_id <- sub(">", glue::glue(">{marker}_{line_number}_"), line)  #Store information of marker and line number to the header
+      }
+      else{
+        kmer_id_list = c(kmer_id_list, current_kmer_id)       #Add kmer id to the list
+        kmer_seq_list = c(kmer_seq_list, line)  #If it is a sequence add it to the list of sequences
+      }
+    }
+    #Save lists in a dataframe
+    renamed_jf_dump_dataframe <- data.frame(id = kmer_id_list,
+                                            seq = kmer_seq_list,
+                                            stringsAsFactors = FALSE)
+    return(renamed_jf_dump_dataframe)
   }
-  
-  # Creates and connects to database
-  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = path_db)
 
-  #Sets the path of the file
-  path_fasta <- glue::glue("{output}")
+  message("Loading fasta in dataframe...")
+  renamed_jf_df <- rename_kmer_header("temp_jellyfish_dump")
 
-  #Create table on .duckdb
-  DBI::dbExecute(
-    con,
-    paste0("CREATE TABLE fasta_table AS SELECT * FROM read_csv_auto('", path_fasta, "', header = FALSE);")) #Creates dataframe from fasta file
+  jf_dataframe <- renamed_jf_df |>
+    dplyr::mutate(id = stringr::str_remove(.data$id, ">"))
 
-  #Closes the conection after leaving the function
-  on.exit({DBI::dbDisconnect(con, shutdown = TRUE)
-  }, add = TRUE)
-  
-  #List table
-  fasta.data <- dplyr::tbl(con, "fasta_table")
-
-  #Add row number
-  fasta_data_row <- fasta.data |>
-    dplyr::mutate (row_number = dplyr::row_number())
-
-  #Transform fasta into a line file
-  #Select header
-  kmer_id <- fasta_data_row|>
-    dplyr::filter(stringr::str_detect(
-      .data$column0, ">")) |>
-    dplyr::mutate(column0 = stringr::str_remove(.data$column0, ">")) |>
-    dplyr::rename(id = .data$column0)
-
-  #Select sequencia
-  kmer_seq <- fasta_data_row |>
-    dplyr::filter(stringr::str_detect(
-      .data$column0, ">",
-    negate = TRUE)) |>
-    dplyr::rename(seq = .data$column0) |>
-    dplyr::mutate(row_number = .data$row_number - 1)
-
-  #Join header and sequence
-  kmer_line <-  dplyr::full_join(kmer_id, kmer_seq, by = "row_number") |>
-    dplyr::collect() |>
-    dplyr::select(.data$id, .data$seq)
-  
+  message("Removing intermediate files...")
   #Remove intermediate files
-  system(glue::glue("rm temp {marker}.jf"))
-  
+  if(file.exists("temp_jellyfish_dump")) unlink("temp_jellyfish_dump")
+  if(file.exists("temp.fasta")) unlink("temp.fasta")
+
+  #Save renamed fasta file
+  message("Saving renamed fasta file...")
+  renamed_jf_fasta <- renamed_jf_df |>
+    tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
+    dplyr::select(value)
+
+  write.table(renamed_jf_fasta, file = glue::glue("{output}"), quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+
   #Print dataframe content
-  return(kmer_line)
+  return(jf_dataframe)
+
 }

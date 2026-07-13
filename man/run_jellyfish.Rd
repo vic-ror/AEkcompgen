@@ -2,21 +2,23 @@
 % Please edit documentation in R/run_jellyfish.R
 \name{run_jellyfish}
 \alias{run_jellyfish}
-\title{Runs jellyfish and give it's output
+\title{Runs jellyfish and give it's output, both in dataframe form and saving it in the directory given in the output argument
 The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer}
 \usage{
 run_jellyfish(
-  fasta_file,
+  data_frame = NULL,
+  fasta_file = NULL,
   length,
   marker,
   lower_count = NULL,
   upper_count = NULL,
   histo = TRUE,
-  path_db = NULL,
   output
 )
 }
 \arguments{
+\item{data_frame}{A dataframe containing the ID and sequence collumns}
+
 \item{fasta_file}{A fasta file or the path to one.}
 
 \item{length}{The length of kmers that will be counted}
@@ -29,32 +31,26 @@ run_jellyfish(
 
 \item{histo}{Make histogram based on kmer frequency}
 
-\item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file}
-
 \item{output}{Name for output fasta file}
 }
 \value{
 A dataframe containing the counted kmers and their headers with the frequency information
 }
 \description{
-Runs jellyfish and give it's output
+Runs jellyfish and give it's output, both in dataframe form and saving it in the directory given in the output argument
 The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer
 }
 \examples{
 # 1. Create temporary fasta file
-fasta_temp <- tempfile(fileext = ".fasta")
-writeLines(
-text = c(
-">seq1", "GACAGGTACAAGAAGGAGTA",
-">seq2", "AGGGCGACCTTCGATTCGGA",
-">seq3", "TTTACACACTCTCCTTGGAC"),
-con = fasta_temp
-)
+data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
+seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
 # 2. Run function with temporary file
-line_file <- run_jellyfish(fasta_temp, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
+line_file <- run_jellyfish(data_frame = data_frame_test, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
 # 3. View resulting line dataframe
 print(line_file)
 # 4. Delete temporary file
-unlink(fasta_temp)
 unlink("test_output.fasta")
+unlink("temp.fasta")
+unlink("test.jf")
+unlink("temp_jellyfish_dump")
 }
