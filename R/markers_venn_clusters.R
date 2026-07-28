@@ -14,10 +14,10 @@
 #'  V2 = c("A, B, C", "B, C", "B, A", "A, C", "B"))
 #'
 #' # 2. Run function with temporary file
-#' venn_cd <- markers_venn(collapsed_markers_test)
+#' venn_cd <- markers_venn_clusters(collapsed_markers_test)
 #' # 3. View result
 #' print(venn_cd)
-markers_venn <- function(collapsed_markers, marker_label = NULL, color_pallete = "PuBuGn"){
+markers_venn_clusters <- function(collapsed_markers, marker_label = NULL, color_pallete = "PuBuGn"){
 
   #Create lists for ggVennDiagram
   message("Creating lists for diagram based on the given markers...")

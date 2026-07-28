@@ -58,14 +58,28 @@ select_shared_seq <- function(..., path_db = NULL) {
     duckdb::duckdb_unregister(con, name = table_name)
 
   }
-  shared_seqs <- dplyr::tbl(con, "merged_table") |>
+  shared_seqs_marker <- dplyr::tbl(con, "merged_table") |>
     dplyr::group_by(.data$seq) |>
-    dplyr::filter(dplyr::n() > 1) |> #Filter sequences that appear only once = Exclusive
+    dplyr::filter(dplyr::n() > 1) |> #Filter sequences that appear more than once
     dplyr::mutate(marker = stringr::str_remove(.data$header, "_.*")) |>
     dplyr::ungroup() |>
     dplyr::group_by(.data$seq) |>
-    dplyr::summarise(markers = stringr::str_flatten(.data$marker, collapse = ", ")) |>
-    dplyr::collect()
+    dplyr::summarise(marker = stringr::str_flatten(.data$marker, collapse = ","))
+
+  shared_seqs_header <- dplyr::tbl(con, "merged_table") |>
+    dplyr::group_by(.data$seq) |>
+    dplyr::filter(dplyr::n() > 1) |> #Filter sequences that appear more than once
+    dplyr::ungroup() |>
+    dplyr::group_by(.data$seq) |>
+    dplyr::summarise(header = stringr::str_flatten(.data$header, collapse = ","))
+
+  shared_seqs <- dplyr::full_join(shared_seqs_marker, shared_seqs_header, by = "seq") |>
+    dplyr::collect() |>
+    tidyr::separate_longer_delim(.data$header, delim = ",") |>
+    dplyr::group_by(.data$seq, .data$marker) |>
+    dplyr::mutate(col_id = paste0("header_", dplyr::row_number())) |>
+    dplyr::ungroup() |>
+    tidyr::pivot_wider(names_from = .data$col_id, values_from = .data$header)
 
   return(shared_seqs)
 }

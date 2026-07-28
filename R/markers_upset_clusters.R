@@ -16,10 +16,10 @@
 #'  V2 = c("A, B, C", "B, C", "B, A", "A, C", "B"))
 #'
 #' # 2. Run function with temporary file
-#' upset_cd <- markers_upset(collapsed_markers_test)
+#' upset_cd <- markers_upset_clusters(collapsed_markers_test)
 #' # 3. View result
 #' print(upset_cd)
-markers_upset <- function(collapsed_markers, marker_label = NULL, color_pallete = "PuBuGn", empty_intersection = NULL, file_name = NULL){
+markers_upset_clusters <- function(collapsed_markers, marker_label = NULL, color_pallete = "PuBuGn", empty_intersection = NULL, file_name = NULL){
 
   #Create lists for ggVennDiagram
   message("Creating lists for diagram based on the given markers...")
@@ -70,7 +70,6 @@ markers_upset <- function(collapsed_markers, marker_label = NULL, color_pallete 
                 )
 
 
-  #OPCAO DE MUDAR NOME DE TAGSf
 
   return(upset_plot)
 

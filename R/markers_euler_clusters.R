@@ -13,10 +13,10 @@
 #'  V2 = c("A, B, C", "B, C", "B, A", "A, C", "B"))
 #'
 #' # 2. Run function with temporary file
-#' euler_cd <- markers_euler(collapsed_markers_test)
+#' euler_cd <- markers_euler_clusters(collapsed_markers_test)
 #' # 3. View result
 #' print(euler_cd)
-markers_euler <- function(collapsed_markers, marker_label = NULL, color_pallete = "Set 2"){
+markers_euler_clusters <- function(collapsed_markers, marker_label = NULL, color_pallete = "Set 2"){
 
   #Create a list where each markers has a cluster associated with
   message("Creating lists for diagram based on the given markers...")

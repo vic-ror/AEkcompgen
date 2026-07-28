@@ -3,6 +3,7 @@
 #'
 #' @param dataframe_cd A dataframe from the run_cd_hit function
 #' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
+#' @param out The name or path of a file to save the information on a .txt file
 #'
 #' @return A dataframe containing the collumns "cluster", "id", "tag".
 #' @export
@@ -19,7 +20,7 @@
 #' print(marked_file)
 
 
-cd_hit_info <- function(dataframe_cd, path_db = NULL){
+cd_hit_info <- function(dataframe_cd, path_db = NULL, out = NULL){
   #Creates a temporary path to save connection if no path is given
   if (is.null(path_db)) {
     path_db <- tempfile(fileext = ".duckdb")
@@ -72,8 +73,13 @@ cd_hit_info <- function(dataframe_cd, path_db = NULL){
   info_cdhit <- glue::glue("Number of clusters: {number_clusters}
                      Mean quantity of k-mers per cluster: {kmers_per_cluster_mean}
                      Median quantity of k-mers per cluster: {kmers_per_cluster_median}
-                     Largest cluster(s): {paste(unlist(largest_clusters), collapse = ', ')} | Quantity of k-mers: {largest_kmers}\
-                     Smallest cluster(s): {paste(unlist(smallest_clusters), collapse = ', ')} | Quantity of k-mer(s): {smallest_kmers}")
+                     Largest cluster(s) quantity of k-mers: {largest_kmers}\
+                     Smallest cluster(s) quantity of k-mer(s): {smallest_kmers}")
+
+  if(!is.null(out)){
+    writeLines(info_cdhit,
+               glue::glue("{out}.txt"))
+  }
 
   return(info_cdhit)
 }

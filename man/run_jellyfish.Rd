@@ -12,8 +12,7 @@ run_jellyfish(
   marker,
   lower_count = NULL,
   upper_count = NULL,
-  histo = TRUE,
-  output
+  out
 )
 }
 \arguments{
@@ -29,9 +28,7 @@ run_jellyfish(
 
 \item{upper_count}{Don't output k-mers with count higher than this}
 
-\item{histo}{Make histogram based on kmer frequency}
-
-\item{output}{Name for output fasta file}
+\item{out}{Name for output fasta file}
 }
 \value{
 A dataframe containing the counted kmers and their headers with the frequency information
@@ -41,11 +38,17 @@ Runs jellyfish and give it's output, both in dataframe form and saving it in the
 The id for the sequence contains the row of the kmer in the fasta file and the the count of the k-mer
 }
 \examples{
+\dontshow{if (Sys.which("jellyfish") != "") withAutoprint(\{ # examplesIf}
 # 1. Create temporary fasta file
 data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
-seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
+seq = c("GACAGGTACAAGAAGGAGTA",
+"AGGGCGACCTTCGATTCGGA", 
+"TTTACACACTCTCCTTGGAC"))
 # 2. Run function with temporary file
-line_file <- run_jellyfish(data_frame = data_frame_test, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
+line_file <- run_jellyfish(data_frame = data_frame_test,
+ length =  10,
+ marker = "test",
+ out = "test_output")
 # 3. View resulting line dataframe
 print(line_file)
 # 4. Delete temporary file
@@ -53,4 +56,5 @@ unlink("test_output.fasta")
 unlink("temp.fasta")
 unlink("test.jf")
 unlink("temp_jellyfish_dump")
+\dontshow{\}) # examplesIf}
 }

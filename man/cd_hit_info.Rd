@@ -5,12 +5,14 @@
 \title{Gives info of the run_cd_hit output.
 Such as quantity of clusters, mean, median, largest cluster and smallest cluster.}
 \usage{
-cd_hit_info(dataframe_cd, path_db = NULL)
+cd_hit_info(dataframe_cd, path_db = NULL, out = NULL)
 }
 \arguments{
 \item{dataframe_cd}{A dataframe from the run_cd_hit function}
 
 \item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file}
+
+\item{out}{The name or path of a file to save the information on a .txt file}
 }
 \value{
 A dataframe containing the collumns "cluster", "id", "tag".

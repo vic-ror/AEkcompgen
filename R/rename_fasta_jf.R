@@ -1,7 +1,8 @@
-#' Loads jellyfish dump fasta output into a dataframe, and marks its sequence by renaming the header
+#' Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the marker and the rownumber
 #'
 #' @param fasta_file A fasta output from jellyfish dump contaning the kmer count in the header
 #' @param marker A marker to be added to the header of the fasta, identifying it
+#' @param out The name of a path to save the renamed fasta file
 #'
 #' @return A dataframe containing the counted kmers and their headers with the frequency information
 #' @importFrom rlang .data
@@ -16,13 +17,13 @@
 #' con = fasta_temp
 #' )
 #' # 2. Run function with temporary file
-#' line_file <- load_fasta_jf(fasta_file = fasta_temp, marker = "tag")
+#' line_file <- rename_fasta_jf(fasta_file = fasta_temp, marker = "tag")
 #' # 3. View resulting line dataframe
 #' print(line_file)
 #' # 4. Delete temporary file
 #'unlink(fasta_temp)
 
-load_fasta_jf <- function(fasta_file, marker){
+rename_fasta_jf <- function(fasta_file, marker, out = NULL){
 
   #Load fasta file
   #Read it with readr
@@ -50,6 +51,10 @@ load_fasta_jf <- function(fasta_file, marker){
     dplyr::mutate(nrow = dplyr::row_number()) |>
     dplyr::mutate(header = stringr::str_glue("{marker}_{nrow}_{header}")) |>
     dplyr::select(.data$header, .data$seq)
+
+  #Saving renamed fasta
+  if(!is.null(out))
+    utils::write.table(joined_fasta, file = glue::glue("{out}"), quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 return(joined_fasta)
 

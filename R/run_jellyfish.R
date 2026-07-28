@@ -7,18 +7,22 @@
 #' @param marker The marker that will be used in the header of sequence and file names
 #' @param lower_count Don't output k-mers with count lower than this
 #' @param upper_count Don't output k-mers with count higher than this
-#' @param histo Make histogram based on kmer frequency
-#' @param output Name for output fasta file
+#' @param out Name for output fasta file
 #' @return A dataframe containing the counted kmers and their headers with the frequency information
 #' @importFrom rlang .data
 #' @export
 #'
-#' @examples
+#' @examplesIf Sys.which("jellyfish") != ""
 #' # 1. Create temporary fasta file
 #' data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
-#' seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
+#' seq = c("GACAGGTACAAGAAGGAGTA",
+#' "AGGGCGACCTTCGATTCGGA", 
+#' "TTTACACACTCTCCTTGGAC"))
 #' # 2. Run function with temporary file
-#' line_file <- run_jellyfish(data_frame = data_frame_test, length =  10, marker = "test", histo = FALSE, output = "test_output.fasta")
+#' line_file <- run_jellyfish(data_frame = data_frame_test,
+#'  length =  10,
+#'  marker = "test",
+#'  out = "test_output")
 #' # 3. View resulting line dataframe
 #' print(line_file)
 #' # 4. Delete temporary file
@@ -32,9 +36,8 @@ run_jellyfish <- function(data_frame = NULL,
                           marker,
                           lower_count = NULL,
                           upper_count = NULL,
-                          histo = TRUE,
-                          output){
-  #Check if jellyfish and seqkit is installed
+                          out){
+  #Check if jellyfish is installed
   if (Sys.which("jellyfish") == "") {
     stop(
       "ERROR: The program 'jellyfish' was not found in the system/n
@@ -67,7 +70,7 @@ run_jellyfish <- function(data_frame = NULL,
   }
 
   #Get the output path for the output file
-  out_dir <- dirname(output)
+  out_dir <- dirname(out)
 
   #Run_jellyfish
   #With lower count filter = Prints only kmers with count higher or equal to the filter
@@ -90,18 +93,6 @@ run_jellyfish <- function(data_frame = NULL,
     message("Counting k-mers without any filters...")
     system(glue::glue("jellyfish count -m {length} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
   }
-  #If histo is true creates a file to generate histogram
-  if(histo){
-    message("Creating file to generate histogram...")
-
-  #Define name of the directory for output histo file
-  analyses_dir <- file.path(out_dir, "analyses")
-
-  if (!dir.exists(analyses_dir)) {
-    dir.create(analyses_dir, recursive = TRUE) #Create directory if not existant
-  }
-    system(glue::glue("jellyfish histo {out_dir}/{marker}.jf > {analyses_dir}/{marker}.histo")) #Histo archive
-    }
 
   message("Creating readable fasta file...")
   system(glue::glue("jellyfish dump {out_dir}/{marker}.jf > temp_jellyfish_dump"))# turn output into fasta
@@ -153,7 +144,7 @@ run_jellyfish <- function(data_frame = NULL,
     tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
     dplyr::select(value)
 
-  write.table(renamed_jf_fasta, file = glue::glue("{output}"), quote = FALSE, row.names = FALSE, col.names = FALSE)
+  utils::write.table(renamed_jf_fasta, file = glue::glue("{out}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 
   #Print dataframe content

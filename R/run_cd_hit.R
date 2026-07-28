@@ -3,15 +3,15 @@
 #' @param data_frame A dataframe containing id, seq and marker columns.
 #' @param fasta_file A fasta file or a path to one.
 #' @param identity The identity degree of similarity that will be used to cluster the sequences.
-#' @param output If you want to save the output file, the give the name for it.
+#' @param out If you want to save the output file, the give the name for it.
 #'
-#' @return A dataframe containing the counted kmers and their headers with the frequency information
+#' @return A dataframe containing the clustered groups
 #' @importFrom rlang .data
 #' @export
 #'
-#' @examples
+#' @examplesIf Sys.which("cd-hit") != ""
 #' # 1. Create temporary dataframe
-#' data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
+#' data_frame_test <- data.frame(header = c("seq1", "seq2", "seq3"),
 #' seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC")
 #' )
 #' # 2. Run function with temporary file
@@ -21,7 +21,7 @@
 #'
 
 
-run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = NULL) {
+run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, out = NULL) {
   #Check if cd-hit is installed
   if (Sys.which("cd-hit") == "") {
     stop(
@@ -30,15 +30,23 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = 
       call. = FALSE
     )
   }
+  #Check if identity is a numerical number and ir it is of the correct value
+  if (!is.numeric(identity) || length(identity) != 1){
+    stop("ERROR: Identity must be a numeric value between 0.75 and 1.")
+  }
+
+  if (identity < 0.75 || identity > 1){
+    stop("ERROR: Identity must be between 0.75 and 1.")
+  }
 
   if (!is.null(data_frame) && is.null(fasta_file)){
     #If only a dataframe is provided create fasta file to run cd-hit
     message("Creating fasta file to run cd-hit...")
-    temp_fasta <- data_frame |> dplyr::mutate(id = stringr::str_c(">", id)) |>
-      tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
-      dplyr::select(value)
+    temp_fasta <- data_frame |> dplyr::mutate(header = stringr::str_c(">", .data$header)) |>
+      tidyr::pivot_longer(cols = c(.data$header, .data$seq), names_to = "col_name") |>
+      dplyr::select(.data$value)
 
-    write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
+    utils::write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 
 
@@ -76,8 +84,10 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = 
   else if(identity >= 0.75 && identity < 0.8){
     system(glue::glue("cd-hit-est -i {fasta_file} -o temp_file_cd_hit -d 0 -T 16 -g 0 -M 75000 -aL 0.97 -aS 0.97 -c {identity} -n 4 -b 1"))
   }
-  else if(identity < 0.75){
-    stop("CD-HIT-est is not capable of clustering sequences with an identity smaller than 0.75")
+
+  #Check if CD-HIT-est worked
+  if(!file.exists("temp_file_cd_hit.clstr")){
+    stop("ERROR: CD-HIT-est failed. No .clstr file was generated.")
   }
 
   #Turn clster output file into a R dataframe
@@ -102,8 +112,8 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = 
       }
     }
     #Save lists in dataframe form
-    df_clusters <- data.frame(seq_id = seq_list,
-                              cluster = cluster_list,
+    df_clusters <- data.frame(cluster = cluster_list,
+                              kmer = seq_list,
                               stringsAsFactors = FALSE)
     return(df_clusters)
   }
@@ -112,9 +122,9 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = 
 
   #Remove the temporary files
   #If an output is given save the .clstr file from CD-HIT
-  if(!is.null(output)){
+  if(!is.null(out)){
     message("Saving output .clstr file...")
-    file.rename(from = "temp_file_cd_hit.clstr", to = glue::glue("{output}.clstr"))
+    file.rename(from = "temp_file_cd_hit.clstr", to = glue::glue("{out}.clstr"))
   }
   #If it isnt true remove it
   else {

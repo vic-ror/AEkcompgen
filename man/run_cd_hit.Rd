@@ -4,7 +4,7 @@
 \alias{run_cd_hit}
 \title{CD-HIT-est for the given dataframe or fasta_file}
 \usage{
-run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, output = NULL)
+run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, out = NULL)
 }
 \arguments{
 \item{data_frame}{A dataframe containing id, seq and marker columns.}
@@ -13,22 +13,23 @@ run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, output = NULL)
 
 \item{identity}{The identity degree of similarity that will be used to cluster the sequences.}
 
-\item{output}{If you want to save the output file, the give the name for it.}
+\item{out}{If you want to save the output file, the give the name for it.}
 }
 \value{
-A dataframe containing the counted kmers and their headers with the frequency information
+A dataframe containing the clustered groups
 }
 \description{
 CD-HIT-est for the given dataframe or fasta_file
 }
 \examples{
+\dontshow{if (Sys.which("cd-hit") != "") withAutoprint(\{ # examplesIf}
 # 1. Create temporary dataframe
-data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
+data_frame_test <- data.frame(header = c("seq1", "seq2", "seq3"),
 seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC")
 )
 # 2. Run function with temporary file
 cd_hit_test <- run_cd_hit(data_frame = data_frame_test, identity = 0.9)
 # 3. View resulting line dataframe
 print(cd_hit_test)
-
+\dontshow{\}) # examplesIf}
 }
