@@ -1,4 +1,4 @@
-#' Selects the clusters that contain only one marker
+#' Selects the clusters that contain more than one marker
 #'
 #' @param dataframe_cd A dataframe from the run_cd_hit function
 #' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
@@ -13,51 +13,51 @@
 #'  V2 = c("A_1", "B_13", "C_69", "A_4", "A_2"))
 #'
 #' # 2. Run function with  dataframe
-#' tag_exclusive_clusters <- get_exclusive_clusters(cdhit_out)
+#' shared_clusters <- get_shared_clusters(cdhit_out)
 #' # 3. View result
-#' print(tag_exclusive_clusters)
-get_exclusive_clusters <- function(dataframe_cd, path_db = NULL){
+#' print(shared_clusters)
+get_shared_clusters <- function(dataframe_cd, path_db = NULL){
   #If no datablase path is given, creates a temporary file for it
   if (is.null(path_db)) {
     path_db <- tempfile(fileext = ".duckdb")
   }
   #Create connection
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = path_db)
-
+  
   #Guarantee that the conection will be closed after leaving the function
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
-
+  
   #Load table on duckdb
   duckdb::duckdb_register(con, "input_table", dataframe_cd)
-
+  
   #Work with the given table
   input_id_marker <- dplyr::tbl(con, "input_table") |>
     dplyr::rename_with(~"cluster", 1) |>
     dplyr::rename_with(~"id", 2) |>
     dplyr::mutate(marker = stringr::str_remove(.data$id, "_.*"))
-
+  
   #Get clusters that have only one marker
-  only_1_marker <- input_id_marker |>
+  multiple_markers <- input_id_marker |>
     dplyr::select(.data$cluster, .data$marker) |>
     dplyr::distinct() |>
     dplyr::group_by(.data$cluster) |>
     dplyr::tally() |>
-    dplyr::filter(.data$n == 1)
-
-  #Recover the information from the marker exclusive
-  only_1_marker_info <- dplyr::inner_join(input_id_marker,
-                                          only_1_marker,
+    dplyr::filter(.data$n > 1)
+  
+  #Recover the information from the marker exclusive clusters
+  multiple_marker_info <- dplyr::inner_join(input_id_marker,
+                                          multiple_markers,
                                           by = "cluster") |>
     dplyr::select(.data$cluster, .data$id, .data$marker) |>
     dplyr::arrange(.data$cluster) |>
     dplyr::collect()
-
-  exclusive_clusters_quantity <- only_1_marker_info |>
+  
+  shared_clusters_quantity <- multiple_marker_info |>
     dplyr::select(.data$cluster) |>
     dplyr::distinct(.data$cluster) |>
     nrow()
-
-  message(glue::glue("{exclusive_clusters_quantity} shared clusters found!"))
-
-  return(only_1_marker_info)
+  
+  message(glue::glue("{shared_clusters_quantity} shared clusters found!"))
+  
+  return(multiple_marker_info)
 }

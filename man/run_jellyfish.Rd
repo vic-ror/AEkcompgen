@@ -41,9 +41,7 @@ The id for the sequence contains the row of the kmer in the fasta file and the t
 \dontshow{if (Sys.which("jellyfish") != "") withAutoprint(\{ # examplesIf}
 # 1. Create temporary fasta file
 data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
-seq = c("GACAGGTACAAGAAGGAGTA",
-"AGGGCGACCTTCGATTCGGA", 
-"TTTACACACTCTCCTTGGAC"))
+seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
 # 2. Run function with temporary file
 line_file <- run_jellyfish(data_frame = data_frame_test,
  length =  10,

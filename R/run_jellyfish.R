@@ -15,9 +15,7 @@
 #' @examplesIf Sys.which("jellyfish") != ""
 #' # 1. Create temporary fasta file
 #' data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
-#' seq = c("GACAGGTACAAGAAGGAGTA",
-#' "AGGGCGACCTTCGATTCGGA", 
-#' "TTTACACACTCTCCTTGGAC"))
+#' seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
 #' # 2. Run function with temporary file
 #' line_file <- run_jellyfish(data_frame = data_frame_test,
 #'  length =  10,
@@ -49,11 +47,11 @@ run_jellyfish <- function(data_frame = NULL,
   if (!is.null(data_frame) && is.null(fasta_file)){
     #If only a dataframe is provided create fasta file to run jellyfish
     message("Creating fasta file to run jellyfish...")
-    temp_fasta <- data_frame |> dplyr::mutate(id = stringr::str_c(">", id)) |>
-      tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
-      dplyr::select(value)
+    temp_fasta <- data_frame |> dplyr::mutate(id = stringr::str_c(">", .data$id)) |>
+      tidyr::pivot_longer(cols = c(.data$id, .data$seq), names_to = "col_name") |>
+      dplyr::select(.data$value)
 
-    write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
+    utils::write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 
     fasta_file = "temp.fasta"
@@ -141,8 +139,8 @@ run_jellyfish <- function(data_frame = NULL,
   #Save renamed fasta file
   message("Saving renamed fasta file...")
   renamed_jf_fasta <- renamed_jf_df |>
-    tidyr::pivot_longer(cols = c(id, seq), names_to = "col_name") |>
-    dplyr::select(value)
+    tidyr::pivot_longer(cols = c(.data$id, .data$seq), names_to = "col_name") |>
+    dplyr::select(.data$value)
 
   utils::write.table(renamed_jf_fasta, file = glue::glue("{out}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
 
