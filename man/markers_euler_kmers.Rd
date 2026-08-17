@@ -30,9 +30,9 @@ The suggested maximum number of markers is 4 but can hold it up to 7 markers, if
 }
 \examples{
 # 1. Create temporary dataframes
-data_1 <- data.frame(header = c("tag1_1_1", "tag1_2_2", "tag1_3_3", "tag1_4_4", "tag1_5_5"),
+data_1 <- data.frame(id = c("tag1_1_1", "tag1_2_2", "tag1_3_3", "tag1_4_4", "tag1_5_5"),
  seq = c("AAAG", "AGAG", "CTGC", "AAAA", "GAGA"))
-data_2 <- data.frame(header = c("tag2_1_1", "tag2_2_2", "tag2_3_3", "tag2_4_4", "tag2_5_5"),
+data_2 <- data.frame(id = c("tag2_1_1", "tag2_2_2", "tag2_3_3", "tag2_4_4", "tag2_5_5"),
  seq = c("AATG", "AGAG", "CAGC", "AATA", "GAGA"))
 
 # 2. Run function with temporary file

@@ -9,10 +9,10 @@ run_jellyfish(
   data_frame = NULL,
   fasta_file = NULL,
   length,
-  marker,
+  dataset_label,
   lower_count = NULL,
   upper_count = NULL,
-  out
+  out = NULL
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ run_jellyfish(
 
 \item{length}{The length of kmers that will be counted}
 
-\item{marker}{The marker that will be used in the header of sequence and file names}
+\item{dataset_label}{The dataset_label that will be used in the header of sequence and file names}
 
 \item{lower_count}{Don't output k-mers with count lower than this}
 
@@ -45,8 +45,7 @@ seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC"))
 # 2. Run function with temporary file
 line_file <- run_jellyfish(data_frame = data_frame_test,
  length =  10,
- marker = "test",
- out = "test_output")
+ dataset_label = "test")
 # 3. View resulting line dataframe
 print(line_file)
 # 4. Delete temporary file

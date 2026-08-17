@@ -7,7 +7,7 @@
 run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, out = NULL)
 }
 \arguments{
-\item{data_frame}{A dataframe containing id, seq and marker columns.}
+\item{data_frame}{A dataframe containing id, seq and label columns.}
 
 \item{fasta_file}{A fasta file or a path to one.}
 
@@ -24,7 +24,7 @@ CD-HIT-est for the given dataframe or fasta_file
 \examples{
 \dontshow{if (Sys.which("cd-hit") != "") withAutoprint(\{ # examplesIf}
 # 1. Create temporary dataframe
-data_frame_test <- data.frame(header = c("seq1", "seq2", "seq3"),
+data_frame_test <- data.frame(id = c("seq1", "seq2", "seq3"),
 seq = c("GACAGGTACAAGAAGGAGTA", "AGGGCGACCTTCGATTCGGA", "TTTACACACTCTCCTTGGAC")
 )
 # 2. Run function with temporary file

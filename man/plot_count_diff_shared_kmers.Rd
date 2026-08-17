@@ -2,43 +2,47 @@
 % Please edit documentation in R/plot_count_diff_shared_kmers.R
 \name{plot_count_diff_shared_kmers}
 \alias{plot_count_diff_shared_kmers}
-\title{Compares the kmer frequency between two markers
-Takes output of the select_shared_seq and compares the kmer frequency between two markers giving the modulus
+\title{Compares the kmer frequency between different possible pairs of dataset labels,
+Takes output of the select_shared_seq and compares the kmer frequency between two labels giving the modulus
 of the difference.}
 \usage{
 plot_count_diff_shared_kmers(
   shared_df,
   cut_off = NULL,
-  separate_markers = FALSE,
-  colors = c("purple", "green"),
+  color_palette = "Set2",
+  free_scale = FALSE,
+  plot_title = "Modulus of Count Difference",
   path_db = NULL
 )
 }
 \arguments{
 \item{shared_df}{Dataframe from select_shared_seq.}
 
-\item{cut_off}{A minimal value of kmer_frequency}
+\item{cut_off}{A minimal value of k-mer count difference.}
 
-\item{separate_markers}{Separates markers into different plots, using facet_wrap in ggplot.}
+\item{color_palette}{A color pallete from the scale_fill_gradientn function, default is "Set2".}
 
-\item{colors}{A list of two colors to fill the plot's bars.}
+\item{free_scale}{If the plots by labels should be free scale, put TRUE, or in the same scale, default.}
+
+\item{plot_title}{The title for the plot.}
 
 \item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file.}
 }
 \value{
-A daframe with the frequency modulus difference.
+A daframe with the frequency modulus difference of different pairs of dataset labels.
 }
 \description{
-Compares the kmer frequency between two markers
-Takes output of the select_shared_seq and compares the kmer frequency between two markers giving the modulus
+Compares the kmer frequency between different possible pairs of dataset labels,
+Takes output of the select_shared_seq and compares the kmer frequency between two labels giving the modulus
 of the difference.
 }
 \examples{
 # 1. Create temporary dataframe
 shared_test <- data.frame(seq = c("GAGA", "ATGA", "AAAA"),
- marker = c("Marker1,Marker2", "Marker1,Marker2", "Marker1,Marker2"),
-  header_1 = c("Marker1_3_3", "Marker1_2_15", "Marker1_3_25"),
-  header_2 = c("Marker2_3_45", "Marker2_2_50", "Marker2_3_30"))
+ label = c("label1,label2", "label1,label2", "label1,label2"),
+  id_1 = c("label1_3_3", "label1_2_15", "label1_3_25"),
+  id_2 = c("label2_3_45", "label2_2_50",
+   "label2_3_30"))
 
 # 2. Run function with temporary file
 plots_freq_comp <- plot_count_diff_shared_kmers(shared_test)

@@ -4,7 +4,7 @@
 #' @param data_frame A dataframe containing the ID and sequence collumns
 #' @param fasta_file A fasta file or the path to one.
 #' @param length The length of kmers that will be counted
-#' @param marker The marker that will be used in the header of sequence and file names
+#' @param dataset_label The dataset_label that will be used in the header of sequence and file names
 #' @param lower_count Don't output k-mers with count lower than this
 #' @param upper_count Don't output k-mers with count higher than this
 #' @param out Name for output fasta file
@@ -19,8 +19,7 @@
 #' # 2. Run function with temporary file
 #' line_file <- run_jellyfish(data_frame = data_frame_test,
 #'  length =  10,
-#'  marker = "test",
-#'  out = "test_output")
+#'  dataset_label = "test")
 #' # 3. View resulting line dataframe
 #' print(line_file)
 #' # 4. Delete temporary file
@@ -31,10 +30,10 @@
 run_jellyfish <- function(data_frame = NULL,
                           fasta_file = NULL,
                           length,
-                          marker,
+                          dataset_label,
                           lower_count = NULL,
                           upper_count = NULL,
-                          out){
+                          out = NULL){
   #Check if jellyfish is installed
   if (Sys.which("jellyfish") == "") {
     stop(
@@ -53,6 +52,10 @@ run_jellyfish <- function(data_frame = NULL,
 
     utils::write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
+    on.exit(
+      if(file.exists("temp.fasta")) unlink("temp.fasta"), add = TRUE
+    )
+
 
     fasta_file = "temp.fasta"
   }
@@ -67,85 +70,90 @@ run_jellyfish <- function(data_frame = NULL,
     stop("Please provide EITHER a dataframe OR a fasta file, not both.")
   }
 
-  #Get the output path for the output file
-  out_dir <- dirname(out)
 
   #Run_jellyfish
   #With lower count filter = Prints only kmers with count higher or equal to the filter
   if (!is.null(lower_count) && is.null(upper_count)){
     message(glue::glue("Counting k-mers with count higher or equal to {lower_count}..."))
-    system(glue::glue("jellyfish count -m {length} -L {lower_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -L {lower_count} -s 275M -t 10 -C -o {dataset_label}.jf {fasta_file}"))
   }
   #With higher count filter = Prints only kmers with count smaller or equal to the filter
   else if (is.null(lower_count) && !is.null(upper_count)){
     message(glue::glue("Counting k-mers with count smaller or equal to {upper_count}..."))
-    system(glue::glue("jellyfish count -m {length} -U {upper_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -U {upper_count} -s 275M -t 10 -C -o {dataset_label}.jf {fasta_file}"))
   }
   #With higher and lower count filter = Prints only kmers with count higher, smaller or equal to the filter
   else if (!is.null(lower_count) && !is.null(upper_count)){
     message(glue::glue("Counting k-mers with count smaller or equal to {upper_count} and higher or equal to {lower_count}..."))
-    system(glue::glue("jellyfish count -m {length} -U {upper_count} -L {lower_count} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -U {upper_count} -L {lower_count} -s 275M -t 10 -C -o {dataset_label}.jf {fasta_file}"))
   }
   #Without count filter
   else {
     message("Counting k-mers without any filters...")
-    system(glue::glue("jellyfish count -m {length} -s 275M -t 10 -C -o {out_dir}/{marker}.jf {fasta_file}"))
+    system(glue::glue("jellyfish count -m {length} -s 275M -t 10 -C -o {dataset_label}.jf {fasta_file}"))
   }
 
+  on.exit(
+    if(file.exists(glue::glue("{dataset_label}.jf"))) unlink(glue::glue("{dataset_label}.jf")), add = TRUE
+  )
+
+
   message("Creating readable fasta file...")
-  system(glue::glue("jellyfish dump {out_dir}/{marker}.jf > temp_jellyfish_dump"))# turn output into fasta
+  system(glue::glue("jellyfish dump {dataset_label}.jf > temp_jellyfish_dump"))# turn output into fasta
+
+  on.exit(
+    if(file.exists("temp_jellyfish_dump")) unlink("temp_jellyfish_dump"), add = TRUE
+  )
 
   message("Renaming fasta file headers to contain the row number and the count of the k-mer...")
 
-  #Function to rename the header
-  rename_kmer_header <- function(jf_readable_file){
-    file <- readLines(jf_readable_file) #Read the file
+  #Load temporary fasta file
+  #Read it with readr
+  fasta <- readr::read_lines("temp_jellyfish_dump", lazy = FALSE)
 
-    #Create arguments
-    current_kmer_id = NULL # Create a string to store the current k-mer id
-    line_number = 0       #Create a argument to store the line number
-    kmer_id_list = c()    #Create a list to store k-mer ids
-    kmer_seq_list = c()   #Create a list to store k-mer sequences
-
-
-    for(line in file) {
-      if (startsWith(line, ">")){           #If it is the header
-        line_number = line_number + 1       #Add one to kmer_number
-        current_kmer_id <- sub(">", glue::glue(">{marker}_{line_number}_"), line)  #Store information of marker and line number to the header
-      }
-      else{
-        kmer_id_list = c(kmer_id_list, current_kmer_id)       #Add kmer id to the list
-        kmer_seq_list = c(kmer_seq_list, line)  #If it is a sequence add it to the list of sequences
-      }
-    }
-    #Save lists in a dataframe
-    renamed_jf_dump_dataframe <- data.frame(id = kmer_id_list,
-                                            seq = kmer_seq_list,
-                                            stringsAsFactors = FALSE)
-    return(renamed_jf_dump_dataframe)
+  #Check if given file is empty
+  if (length(fasta) == 0) {
+    stop("Error: The given fasta file is empty.")
   }
 
-  message("Loading fasta in dataframe...")
-  renamed_jf_df <- rename_kmer_header("temp_jellyfish_dump")
+  fasta_df <- tibble::tibble(fasta) |>
+    dplyr::mutate(is_header = stringr::str_detect(.data$fasta, "^>")) |>
+    dplyr::mutate(group_id = cumsum(.data$is_header)) #identify the sequence with the header
 
-  jf_dataframe <- renamed_jf_df |>
-    dplyr::mutate(id = stringr::str_remove(.data$id, ">"))
+  header <- fasta_df |> dplyr::filter(stringr::str_detect(.data$fasta, ">")) |>
+    dplyr::rename(id = .data$fasta) |>
+    dplyr::select(.data$id, .data$group_id)
 
-  message("Removing intermediate files...")
-  #Remove intermediate files
-  if(file.exists("temp_jellyfish_dump")) unlink("temp_jellyfish_dump")
-  if(file.exists("temp.fasta")) unlink("temp.fasta")
+  seq <- fasta_df |> dplyr::filter(!stringr::str_detect(.data$fasta, ">")) |>
+    dplyr::rename(seq = .data$fasta) |>
+    dplyr::select(.data$seq, .data$group_id)
 
-  #Save renamed fasta file
-  message("Saving renamed fasta file...")
-  renamed_jf_fasta <- renamed_jf_df |>
-    tidyr::pivot_longer(cols = c(.data$id, .data$seq), names_to = "col_name") |>
-    dplyr::select(.data$value)
+  joined_fasta <- dplyr::full_join(header, seq, by = "group_id", multiple = "all") |>
+    dplyr::mutate(id = stringr::str_remove(.data$id, ">")) |>
+    dplyr::mutate(nrow = dplyr::row_number()) |>
+    dplyr::mutate(id = stringr::str_glue("{dataset_label}_{nrow}_{id}")) |>
+    dplyr::select(.data$id, .data$seq)
 
-  utils::write.table(renamed_jf_fasta, file = glue::glue("{out}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+  #If an output file is given save it into a .fasta file
+  if(!is.null(out)){
+    message("Saving renamed fasta file...")
+
+    joined_fasta_file <- joined_fasta |>
+      dplyr::mutate(id = glue::glue(">{id}")) |>
+      tidyr::pivot_longer(cols = c(.data$id, .data$seq),
+                          names_to = "type",
+                          values_to = "fasta_line") |>
+      dplyr::select(.data$fasta_line)
+
+    utils::write.table(joined_fasta_file, file = glue::glue("{out}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+    if(file.exists(glue::glue("{dataset_label}.jf"))) file.rename(from = glue::glue("{dataset_label}.jf"), to = glue::glue("{out}.jf"))
+
+  }
 
 
   #Print dataframe content
-  return(jf_dataframe)
+  return(joined_fasta)
 
 }

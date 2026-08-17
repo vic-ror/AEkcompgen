@@ -11,9 +11,9 @@
 #'
 #' @examples
 #' # 1. Create temporary dataframes
-#' data_1 <- data.frame(header = c("tag1_1_1", "tag1_2_2", "tag1_3_3", "tag1_4_4", "tag1_5_5"),
+#' data_1 <- data.frame(id = c("tag1_1_1", "tag1_2_2", "tag1_3_3", "tag1_4_4", "tag1_5_5"),
 #'  seq = c("AAAG", "AGAG", "CTGC", "AAAA", "GAGA"))
-#' data_2 <- data.frame(header = c("tag2_1_1", "tag2_2_2", "tag2_3_3", "tag2_4_4", "tag2_5_5"),
+#' data_2 <- data.frame(id = c("tag2_1_1", "tag2_2_2", "tag2_3_3", "tag2_4_4", "tag2_5_5"),
 #'  seq = c("AATG", "AGAG", "CAGC", "AATA", "GAGA"))
 #'
 #' # 2. Run function with temporary file
@@ -64,7 +64,7 @@ markers_euler_kmers <- function(..., path_db = NULL, marker_label = NULL, color_
   #Detect markers
   message("Extracting markers...")
   exclusive_seqs <- dplyr::tbl(con, "merged_table") |>
-    dplyr::mutate(marker = stringr::str_remove(.data$header, "_.*")) |>
+    dplyr::mutate(marker = stringr::str_remove(.data$id, "_.*")) |>
     dplyr::select(.data$seq, .data$marker) |>
     dplyr::collect()
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/select_shared_seq.R
 \name{select_shared_seq}
 \alias{select_shared_seq}
-\title{Selects the shared sequences of two files after the set_marker() function}
+\title{Selects the shared sequences of two files after the run_jellyfish or rename_fasta_jf functions based on the dataset label}
 \usage{
 select_shared_seq(..., path_db = NULL)
 }
@@ -12,18 +12,18 @@ select_shared_seq(..., path_db = NULL)
 \item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file}
 }
 \value{
-A dataframe containing the exclusive sequences to each marker
+A dataframe containing the exclusive sequences to each label
 }
 \description{
-Selects the shared sequences of two files after the set_marker() function
+Selects the shared sequences of two files after the run_jellyfish or rename_fasta_jf functions based on the dataset label
 }
 \examples{
 # 1. Create temporary fasta file
-fasta_temp1 <- data.frame(header = c("seq1", "seq2", "seq3", "seq4", "seq5"),
+fasta_temp1 <- data.frame(id = c("seq1", "seq2", "seq3", "seq4", "seq5"),
  seq = c("ATCGATCG", "TCGATCGA", "TCAGTCAG", "AATATATA", "TAGGGT"))
 
-fasta_temp2 <- data.frame(header = c("seq6", "seq7", "seq8", "seq9", "seq10"),
- seq = c("GCGCGCG", "GAGAGAG", "TCTCTCTC", "AATATATA", "TAGGGT"))
+fasta_temp2 <- data.frame(id = c("seq6", "seq7", "seq8", "seq9", "seq10"),
+ seq = c("GAGAGAG", "TAGGGT", "TCTCTCTC", "AATATATA", "ATCACTG"))
 # 3. Run function with example dataframes
 exc_seq <- select_shared_seq(fasta_temp1, fasta_temp2)
 # 4. View result

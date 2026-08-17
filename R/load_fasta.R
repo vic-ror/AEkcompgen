@@ -37,16 +37,16 @@ load_fasta <- function(fasta_file){
     dplyr::mutate(group_id = cumsum(.data$is_header)) #identify the sequence with the header
 
   header <- fasta_df |> dplyr::filter(stringr::str_detect(.data$fasta, ">")) |>
-    dplyr::rename(header = .data$fasta) |>
-    dplyr::select(.data$header, .data$group_id)
+    dplyr::rename(id = .data$fasta) |>
+    dplyr::select(.data$id, .data$group_id)
 
   seq <- fasta_df |> dplyr::filter(!stringr::str_detect(.data$fasta, ">")) |>
     dplyr::rename(seq = .data$fasta) |>
     dplyr::select(.data$seq, .data$group_id)
 
   joined_fasta <- dplyr::full_join(header, seq, by = "group_id", multiple = "all") |>
-    dplyr::mutate(header = stringr::str_remove(.data$header, ">")) |>
-    dplyr::select(.data$header, .data$seq)
+    dplyr::mutate(id = stringr::str_remove(.data$id, ">")) |>
+    dplyr::select(.data$id, .data$seq)
 
   return(joined_fasta)
 }

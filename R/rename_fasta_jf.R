@@ -1,7 +1,7 @@
-#' Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the marker and the rownumber
+#' Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the dataset_label and the rownumber
 #'
 #' @param fasta_file A fasta output from jellyfish dump contaning the kmer count in the header
-#' @param marker A marker to be added to the header of the fasta, identifying it
+#' @param dataset_label A label to be added to the header of the fasta, identifying it
 #' @param out The name of a path to save the renamed fasta file
 #'
 #' @return A dataframe containing the counted kmers and their headers with the frequency information
@@ -17,13 +17,13 @@
 #' con = fasta_temp
 #' )
 #' # 2. Run function with temporary file
-#' line_file <- rename_fasta_jf(fasta_file = fasta_temp, marker = "tag")
+#' line_file <- rename_fasta_jf(fasta_file = fasta_temp, dataset_label = "tag")
 #' # 3. View resulting line dataframe
 #' print(line_file)
 #' # 4. Delete temporary file
 #'unlink(fasta_temp)
 
-rename_fasta_jf <- function(fasta_file, marker, out = NULL){
+rename_fasta_jf <- function(fasta_file, dataset_label, out = NULL){
 
   #Load fasta file
   #Read it with readr
@@ -39,18 +39,18 @@ rename_fasta_jf <- function(fasta_file, marker, out = NULL){
     dplyr::mutate(group_id = cumsum(.data$is_header)) #identify the sequence with the header
 
   header <- fasta_df |> dplyr::filter(stringr::str_detect(.data$fasta, ">")) |>
-    dplyr::rename(header = .data$fasta) |>
-    dplyr::select(.data$header, .data$group_id)
+    dplyr::rename(id = .data$fasta) |>
+    dplyr::select(.data$id, .data$group_id)
 
   seq <- fasta_df |> dplyr::filter(!stringr::str_detect(.data$fasta, ">")) |>
     dplyr::rename(seq = .data$fasta) |>
     dplyr::select(.data$seq, .data$group_id)
 
   joined_fasta <- dplyr::full_join(header, seq, by = "group_id", multiple = "all") |>
-    dplyr::mutate(header = stringr::str_remove(.data$header, ">")) |>
+    dplyr::mutate(id = stringr::str_remove(.data$id, ">")) |>
     dplyr::mutate(nrow = dplyr::row_number()) |>
-    dplyr::mutate(header = stringr::str_glue("{marker}_{nrow}_{header}")) |>
-    dplyr::select(.data$header, .data$seq)
+    dplyr::mutate(id = stringr::str_glue("{dataset_label}_{nrow}_{id}")) |>
+    dplyr::select(.data$id, .data$seq)
 
   #Saving renamed fasta
   if(!is.null(out))

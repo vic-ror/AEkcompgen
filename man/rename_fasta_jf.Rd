@@ -2,14 +2,14 @@
 % Please edit documentation in R/rename_fasta_jf.R
 \name{rename_fasta_jf}
 \alias{rename_fasta_jf}
-\title{Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the marker and the rownumber}
+\title{Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the dataset_label and the rownumber}
 \usage{
-rename_fasta_jf(fasta_file, marker, out = NULL)
+rename_fasta_jf(fasta_file, dataset_label, out = NULL)
 }
 \arguments{
 \item{fasta_file}{A fasta output from jellyfish dump contaning the kmer count in the header}
 
-\item{marker}{A marker to be added to the header of the fasta, identifying it}
+\item{dataset_label}{A label to be added to the header of the fasta, identifying it}
 
 \item{out}{The name of a path to save the renamed fasta file}
 }
@@ -17,7 +17,7 @@ rename_fasta_jf(fasta_file, marker, out = NULL)
 A dataframe containing the counted kmers and their headers with the frequency information
 }
 \description{
-Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the marker and the rownumber
+Loads jellyfish dump fasta output into a dataframe, and renames the header by adding the dataset_label and the rownumber
 }
 \examples{
 # 1. Create temporary fasta file
@@ -28,7 +28,7 @@ text = c(">10", "ATCGATCG",
 con = fasta_temp
 )
 # 2. Run function with temporary file
-line_file <- rename_fasta_jf(fasta_file = fasta_temp, marker = "tag")
+line_file <- rename_fasta_jf(fasta_file = fasta_temp, dataset_label = "tag")
 # 3. View resulting line dataframe
 print(line_file)
 # 4. Delete temporary file

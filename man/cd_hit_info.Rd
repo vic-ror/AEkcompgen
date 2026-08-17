@@ -24,7 +24,7 @@ Such as quantity of clusters, mean, median, largest cluster and smallest cluster
 \examples{
 # 1. Create temporary dataframe
 cdhit_out <- data.frame(V1 = c(1, 1, 2, 3, 3),
- V2 = c("infantum_1_28", "major_1_33", "infantum_2_2", "infantum_3_19", "major_2_49"))
+ V2 = c("dataset1_1_28", "dataset2_1_33", "dataset1_2_2", "dataset2_3_19", "dataset1_2_49"))
 
 # 2. Run function with dataframe
 marked_file <- cd_hit_info(cdhit_out)

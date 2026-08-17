@@ -26,7 +26,7 @@ run_jellyfish_histo <- function(jf_file, out = NULL){
   #Running jellyfish histo
   system(glue::glue("jellyfish histo {jf_file} > temp.histo"))
 
-  #Loading the histo file and adding marker
+  #Loading the histo file and adding label
   histo_path <- ("temp.histo")
 
   histo_file <- readr::read_lines(histo_path, lazy = FALSE)
@@ -41,7 +41,7 @@ run_jellyfish_histo <- function(jf_file, out = NULL){
 
   #If output name is given, rename the output as the file name
   else{
-    if(file.exists("temp.histo")) file.rename(glue::glue("{out}"))
+    if(file.exists("temp.histo")) file.rename(from = "temp.histo", to = glue::glue("{out}"))
   }
 
   return(histo_df)

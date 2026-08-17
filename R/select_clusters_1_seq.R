@@ -13,10 +13,10 @@
 #'  V2 = c("A_1", "B_13", "C_69", "A_4", "A_2"))
 #'
 #' # 2. Run function with  dataframe
-#' cluster_1_seq <- get_clusters_1_seq(cdhit_out)
+#' cluster_1_seq <- select_clusters_1_seq(cdhit_out)
 #' # 3. View result
 #' print(cluster_1_seq)
-get_clusters_1_seq <- function(dataframe_cd,
+select_clusters_1_seq <- function(dataframe_cd,
                                    path_db = NULL){
   #If no datablase path is given, creates a temporary file for it
   if (is.null(path_db)) {
@@ -32,21 +32,21 @@ get_clusters_1_seq <- function(dataframe_cd,
   duckdb::duckdb_register(con, "input_table", dataframe_cd)
 
   #Work with the given table
-  input_id_marker <- dplyr::tbl(con, "input_table") |>
+  input_id_label <- dplyr::tbl(con, "input_table") |>
     dplyr::rename_with(~"cluster", 1) |>
     dplyr::rename_with(~"id", 2) |>
-    dplyr::mutate(marker = stringr::str_remove(.data$id, "_.*"))
+    dplyr::mutate(label = stringr::str_remove(.data$id, "_.*"))
 
 
-    only_one_seq <- input_id_marker |>
+    only_one_seq <- input_id_label |>
       dplyr::group_by(.data$cluster) |>
       dplyr::tally() |>
       dplyr::filter(.data$n == 1)
 
-    only_1_seq_info <- dplyr::inner_join(input_id_marker,
+    only_1_seq_info <- dplyr::inner_join(input_id_label,
                                             only_one_seq,
                                             by = "cluster") |>
-      dplyr::select(.data$cluster, .data$id, .data$marker) |>
+      dplyr::select(.data$cluster, .data$id, .data$label) |>
       dplyr::arrange(.data$cluster) |>
       dplyr::collect()
 

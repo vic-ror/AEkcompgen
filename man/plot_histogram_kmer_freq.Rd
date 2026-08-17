@@ -4,14 +4,24 @@
 \alias{plot_histogram_kmer_freq}
 \title{Plots an histogram based on the k-mer count and frequency}
 \usage{
-plot_histogram_kmer_freq(..., normalization_value = NULL, colors = NULL)
+plot_histogram_kmer_freq(
+  ...,
+  normalization_value = NULL,
+  color_palette = "Set2",
+  free_scale = FALSE,
+  plot_title = "K-mer count histogram"
+)
 }
 \arguments{
 \item{...}{Dataframes from the mark_jellyfish histo function}
 
 \item{normalization_value}{A value to divide the frequency of k-mers, usually based on the coverage of the mapped reads.}
 
-\item{colors}{The color or list of colors to fill the plot's bars.}
+\item{color_palette}{A color pallete from the scale_fill_gradientn function, default is "Set2"}
+
+\item{free_scale}{If the plots by labels should be free scale, put TRUE, or in the same scale, default.}
+
+\item{plot_title}{The title for the plot.}
 }
 \value{
 A plot objetct displaying a k-mer frequency hostogram:

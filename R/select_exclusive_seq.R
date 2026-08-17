@@ -1,18 +1,18 @@
-#' Selects the exclusive sequences of two files after the set_marker() function
+#' Selects the exclusive sequences of two files after the run_jellyfish or rename_fasta_jf functions based on the dataset label
 #'
 #' @param  ...  At least two dataframes containing the header and the seq column
 #' @param path_db The path to save the .duckdb file, if none given it creates a temporary file
 #'
-#' @return A dataframe containing the exclusive sequences to each marker
+#' @return A dataframe containing the exclusive sequences to each label
 #' @export
 #' @importFrom rlang .data
 #'
 #' @examples
 #' # 1. Create temporary fasta file
-#' fasta_temp1 <- data.frame(header = c("seq1", "seq2", "seq3", "seq4", "seq5"),
+#' fasta_temp1 <- data.frame(id = c("seq1", "seq2", "seq3", "seq4", "seq5"),
 #'  seq = c("ATCGATCG", "TCGATCGA", "TCAGTCAG", "AATATATA", "TAGGGT"))
 #'
-#' fasta_temp2 <- data.frame(header = c("seq6", "seq7", "seq8", "seq9", "seq10"),
+#' fasta_temp2 <- data.frame(id = c("seq6", "seq7", "seq8", "seq9", "seq10"),
 #'  seq = c("GCGCGCG", "GAGAGAG", "TCTCTCTC", "AATATATA", "TAGGGT"))
 #' # 3. Run function with example dataframes
 #' exc_seq <- select_exclusive_seq(fasta_temp1, fasta_temp2)
@@ -66,7 +66,12 @@ select_exclusive_seq <- function(..., path_db = NULL){
     dplyr::ungroup() |>
     dplyr::collect()
 
-  #Unregister table
+  #Give the quantity of exclusive sequences
+  #Information on quantity of clusters
+  exclusive_seqs_quantity <- exclusive_seqs |>
+    nrow()
+
+  message(glue::glue("{exclusive_seqs_quantity} exclusive k-mers found!"))
 
   return(exclusive_seqs)
 
