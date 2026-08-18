@@ -18,7 +18,7 @@
 #'  }
 #' @param minimun_read_length Minimun read length to kept, default is 36.
 #' @param sliding_window_size The sliding window size to verify average phred value, default is 4.
-#' @param average_phred The average phred value for the sliding window, default is 15, if the phred value drops below it the read is cut.
+#' @param average_phred The average phred value for the sliding window, default is 25, if the phred value drops below it the read is cut.
 
 #' @importFrom rlang .data
 #' @export
@@ -36,7 +36,7 @@ run_trimmomatic <- function(mode,
                             out,
                             minimun_read_length = 36,
                             sliding_window_size = 4,
-                            average_phred = 15){
+                            average_phred = 25){
   #Verify if trimmomatic is intalled and in users path
   if (Sys.which("trimmomatic") == "") {
     stop(
