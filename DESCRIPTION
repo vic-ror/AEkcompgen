@@ -13,9 +13,21 @@ Imports:
     dbplyr,
     dplyr,
     duckdb,
+    eulerr,
+    ggplot2,
+    ggVennDiagram,
+    glue,
+    grDevices,
+    purrr,
+    RColorBrewer,
+    readr,
     rlang,
+    scales,
     stringr,
-    tidyr
+    tibble,
+    tidyr,
+    UpSetR,
+    utils
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
