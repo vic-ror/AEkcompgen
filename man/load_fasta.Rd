@@ -20,8 +20,8 @@ Converts fasta file to line
 fasta_temp <- tempfile(fileext = ".fasta")
 writeLines(
 text = c(
-">seq1", "ATCGATCG",
-">seq2", "TCGATCGA"),
+">seq1_1_2", "ATCGATCG",
+">seq2_3_4", "TCGATCGA"),
 con = fasta_temp
 )
 # 2. Run function with temporary file

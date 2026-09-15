@@ -2,9 +2,9 @@
 % Please edit documentation in R/run_cd_hit.R
 \name{run_cd_hit}
 \alias{run_cd_hit}
-\title{CD-HIT-est for the given dataframe or fasta_file}
+\title{Runs CD-HIT-est for the given dataframe or fasta_file}
 \usage{
-run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, out = NULL)
+run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, output = NULL)
 }
 \arguments{
 \item{data_frame}{A dataframe containing id, seq and label columns.}
@@ -13,13 +13,13 @@ run_cd_hit(data_frame = NULL, fasta_file = NULL, identity, out = NULL)
 
 \item{identity}{The identity degree of similarity that will be used to cluster the sequences.}
 
-\item{out}{If you want to save the output file, the give the name for it.}
+\item{output}{If you want to save the output file, the give the name for it.}
 }
 \value{
 A dataframe containing the clustered groups
 }
 \description{
-CD-HIT-est for the given dataframe or fasta_file
+Runs CD-HIT-est for the given dataframe or fasta_file
 }
 \examples{
 \dontshow{if (Sys.which("cd-hit") != "") withAutoprint(\{ # examplesIf}

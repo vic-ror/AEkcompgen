@@ -11,8 +11,7 @@ plot_count_diff_shared_kmers(
   cut_off = NULL,
   color_palette = "Set2",
   free_scale = FALSE,
-  plot_title = "Modulus of Count Difference",
-  path_db = NULL
+  plot_title = "Modulus of Count Difference"
 )
 }
 \arguments{
@@ -25,8 +24,6 @@ plot_count_diff_shared_kmers(
 \item{free_scale}{If the plots by labels should be free scale, put TRUE, or in the same scale, default.}
 
 \item{plot_title}{The title for the plot.}
-
-\item{path_db}{The path to save the .duckdb file, if none given it creates a temporary file.}
 }
 \value{
 A daframe with the frequency modulus difference of different pairs of dataset labels.

@@ -1,9 +1,9 @@
-#' CD-HIT-est for the given dataframe or fasta_file
+#' Runs CD-HIT-est for the given dataframe or fasta_file
 #'
 #' @param data_frame A dataframe containing id, seq and label columns.
 #' @param fasta_file A fasta file or a path to one.
 #' @param identity The identity degree of similarity that will be used to cluster the sequences.
-#' @param out If you want to save the output file, the give the name for it.
+#' @param output If you want to save the output file, the give the name for it.
 #'
 #' @return A dataframe containing the clustered groups
 #' @importFrom rlang .data
@@ -20,8 +20,7 @@
 #' print(cd_hit_test)
 #'
 
-
-run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, out = NULL) {
+run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, output = NULL) {
   #Check if cd-hit is installed
   if (Sys.which("cd-hit") == "") {
     stop(
@@ -39,7 +38,12 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, out = NUL
     stop("ERROR: Identity must be between 0.75 and 1.")
   }
 
+  #If a fasta_file was given
   if (is.null(data_frame) && !is.null(fasta_file)) {
+    #Check if file exists in the given path
+    if(!file.exists(fasta_file)){
+      stop("ERROR: Fasta file not found in the given path.")
+    }
     fasta_head <- readLines(fasta_file, n = 2)
 
     kmer_length <- stringr::str_length(fasta_head[2])
@@ -169,9 +173,9 @@ run_cd_hit <- function(data_frame = NULL, fasta_file = NULL, identity, out = NUL
 
   #Remove the temporary files
   #If an output is given save the .clstr file from CD-HIT
-  if(!is.null(out)){
+  if(!is.null(output)){
     message("Saving output .clstr file...")
-    file.rename(from = "temp_file_cd_hit.clstr", to = glue::glue("{out}.clstr"))
+    file.rename(from = "temp_file_cd_hit.clstr", to = glue::glue("{output}.clstr"))
   }
 
   #Remove other files

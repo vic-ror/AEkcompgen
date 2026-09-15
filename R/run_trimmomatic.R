@@ -1,4 +1,4 @@
-#' Runs trimmomatic to verify read quality using the quality score of phred 33, standar for Illumina data, trim and separate paired and unpaired reads.
+#' Runs trimmomatic to verify read quality using the quality score of phred 33, standard for Illumina data, trim and separate paired and unpaired reads.
 #' Works with short reads from the Illumina sequencing platform.
 #'
 #' @param mode Which mode to run.
@@ -11,7 +11,7 @@
 #'  \item{1 file}{For single-end mode, give only one FASTQ file.}
 #'  \item{2 files}{If paired-end mode, give the forward and reverse sequen FASTQ.}
 #'  }
-#' @param out Output FASTQ files names/paths(4 files if pair ended mode, 1 file for single ended mode)
+#' @param output Output FASTQ files names/paths(4 files if pair ended mode, 1 file for single ended mode)
 #' \describe{
 #'  \item{1 output file}{If single-end mode, output contains only the reads that met the given phred/window_size requirements.}
 #'    \item{4 output files}{If paired-end mode, saving what was paired and unpaired, in this order, between forward and reverse sequences and met the given phred/window_size requirements.}
@@ -27,13 +27,13 @@
 #' #1. Load .fastq test file
 #' temp_fastq <- system.file("extdata", "test.fastq", package = "AEkcompgen")
 #' #2. Run run_trimmomatic function
-#' run_trimmomatic(mode = "SE", input = temp_fastq, out = "test_trimmed.fastq")
+#' run_trimmomatic(mode = "SE", input = temp_fastq, output = "test_trimmed.fastq")
 #' #3. Unlink ouput file
 #' unlink("test_trimmed.fastq")
 #'
 run_trimmomatic <- function(mode,
                             input,
-                            out,
+                            output,
                             minimun_read_length = 36,
                             sliding_window_size = 4,
                             average_phred = 25){
@@ -49,24 +49,39 @@ run_trimmomatic <- function(mode,
 
   #Collapse input and output values into a single line
   input_col <- paste(input, collapse = " ")
-  output_col <- paste(out, collapse = " ")
+  output_col <- paste(output, collapse = " ")
 
   #Check if quanity of files is cmpatible with chosen mode
   if(mode == "PE"){
     #Check if the quantity of files/file names is compatible with the chosen mode
-    if(length(input) != 2 || length(out) != 4){
+    if(length(input) != 2 || length(output) != 4){
       stop("ERROR: Pair ended mode requires 2 input files, and 4 ouput file names.",
            call. = FALSE)
+
+    }
+      #Check if file exists in the given path
+    if(!all(file.exists(input))) {
+        stop("ERROR: One or more Input .fastq files not found in the given path.")
       }
+
+    message("Running Trimmomatic in paired-end mode...")
+
     }
 
   else if(mode == "SE"){
-        #Check if the quantity of files/file names is compatible with the chosen mode
-        if(length(input) != 1 || length(out) != 1){
-          stop("Single ended mode requires 1 input file and 1 output file",
+    #Check if the quantity of files/file names is compatible with the chosen mode
+    if(length(input) != 1 || length(output) != 1){
+      stop("Single ended mode requires 1 input file and 1 output file",
                call = FALSE)
-        }
-  } else{
+      }
+    #Check if file is available in the given path
+    if(!file.exists(input)){
+      stop("ERROR: Input .fastq file not found in the given path.")
+      }
+
+    message("Running Trimmomatic in single-end mode...")
+
+    } else{
       stop(
         "ERROR: The paramater for mode given is invalid.\n
         Please chose between 'PE' for paired-end mode or 'SE' for single end mode"

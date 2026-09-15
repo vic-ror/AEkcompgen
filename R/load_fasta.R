@@ -11,8 +11,8 @@
 #' fasta_temp <- tempfile(fileext = ".fasta")
 #' writeLines(
 #' text = c(
-#' ">seq1", "ATCGATCG",
-#' ">seq2", "TCGATCGA"),
+#' ">seq1_1_2", "ATCGATCG",
+#' ">seq2_3_4", "TCGATCGA"),
 #' con = fasta_temp
 #' )
 #' # 2. Run function with temporary file
@@ -47,6 +47,10 @@ load_fasta <- function(fasta_file){
   joined_fasta <- dplyr::full_join(header, seq, by = "group_id", multiple = "all") |>
     dplyr::mutate(id = stringr::str_remove(.data$id, ">")) |>
     dplyr::select(.data$id, .data$seq)
+
+  if(stringr::str_count(joined_fasta$id[1], "_") != 2){
+    stop("ERROR: The dataset_label must not contain a '_', since it will create problems in later functions, please rename it.")
+  }
 
   return(joined_fasta)
 }

@@ -2,13 +2,13 @@
 % Please edit documentation in R/run_trimmomatic.R
 \name{run_trimmomatic}
 \alias{run_trimmomatic}
-\title{Runs trimmomatic to verify read quality using the quality score of phred 33, standar for Illumina data, trim and separate paired and unpaired reads.
+\title{Runs trimmomatic to verify read quality using the quality score of phred 33, standard for Illumina data, trim and separate paired and unpaired reads.
 Works with short reads from the Illumina sequencing platform.}
 \usage{
 run_trimmomatic(
   mode,
   input,
-  out,
+  output,
   minimun_read_length = 36,
   sliding_window_size = 4,
   average_phred = 25
@@ -27,7 +27,7 @@ run_trimmomatic(
 \item{2 files}{If paired-end mode, give the forward and reverse sequen FASTQ.}
 }}
 
-\item{out}{Output FASTQ files names/paths(4 files if pair ended mode, 1 file for single ended mode)
+\item{output}{Output FASTQ files names/paths(4 files if pair ended mode, 1 file for single ended mode)
 \describe{
 \item{1 output file}{If single-end mode, output contains only the reads that met the given phred/window_size requirements.}
 \item{4 output files}{If paired-end mode, saving what was paired and unpaired, in this order, between forward and reverse sequences and met the given phred/window_size requirements.}
@@ -40,7 +40,7 @@ run_trimmomatic(
 \item{average_phred}{The average phred value for the sliding window, default is 25, if the phred value drops below it the read is cut.}
 }
 \description{
-Runs trimmomatic to verify read quality using the quality score of phred 33, standar for Illumina data, trim and separate paired and unpaired reads.
+Runs trimmomatic to verify read quality using the quality score of phred 33, standard for Illumina data, trim and separate paired and unpaired reads.
 Works with short reads from the Illumina sequencing platform.
 }
 \examples{
@@ -48,7 +48,7 @@ Works with short reads from the Illumina sequencing platform.
 #1. Load .fastq test file
 temp_fastq <- system.file("extdata", "test.fastq", package = "AEkcompgen")
 #2. Run run_trimmomatic function
-run_trimmomatic(mode = "SE", input = temp_fastq, out = "test_trimmed.fastq")
+run_trimmomatic(mode = "SE", input = temp_fastq, output = "test_trimmed.fastq")
 #3. Unlink ouput file
 unlink("test_trimmed.fastq")
 \dontshow{\}) # examplesIf}

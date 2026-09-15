@@ -7,7 +7,7 @@
 #' @param dataset_label The dataset_label that will be used in the header of sequence and file names
 #' @param lower_count Don't output k-mers with count lower than this
 #' @param upper_count Don't output k-mers with count higher than this
-#' @param out Name for output fasta file
+#' @param output Name for output fasta file
 #' @return A dataframe containing the counted kmers and their headers with the frequency information
 #' @importFrom rlang .data
 #' @export
@@ -33,7 +33,7 @@ run_jellyfish <- function(data_frame = NULL,
                           dataset_label,
                           lower_count = NULL,
                           upper_count = NULL,
-                          out = NULL){
+                          output = NULL){
   #Check if jellyfish is installed
   if (Sys.which("jellyfish") == "") {
     stop(
@@ -50,14 +50,14 @@ run_jellyfish <- function(data_frame = NULL,
       tidyr::pivot_longer(cols = c(.data$id, .data$seq), names_to = "col_name") |>
       dplyr::select(.data$value)
 
-    utils::write.table(temp_fasta, file = "temp.fasta", quote = FALSE, row.names = FALSE, col.names = FALSE)
+    utils::write.table(temp_fasta, file = glue::glue("{dataset_label}_temp.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
 
     on.exit(
-      if(file.exists("temp.fasta")) unlink("temp.fasta"), add = TRUE
+      if(file.exists(glue::glue("{dataset_label}_temp.fasta"))) unlink(glue::glue("{dataset_label}_temp.fasta")), add = TRUE
     )
 
 
-    fasta_file = "temp.fasta"
+    fasta_file = glue::glue("{dataset_label}_temp.fasta")
   }
 
   #If no dataframe or fasta file was provided
@@ -70,6 +70,17 @@ run_jellyfish <- function(data_frame = NULL,
     stop("Please provide EITHER a dataframe OR a fasta file, not both.")
   }
 
+  #Check if fasta_file is available
+  #Check if file exists in the given path
+  if(!file.exists(fasta_file)){
+    stop("ERROR: Input fasta file not found in the given path.")
+  }
+
+  #Check if given dataset label has a _ in it
+  #_ would give an error later on
+  if(isTRUE(stringr::str_detect(dataset_label, "_"))){
+    stop("ERROR: dataset_label must not contain '_', since it will create problems in later functions, please rename it.")
+  }
 
   #Run_jellyfish
   #With lower count filter = Prints only kmers with count higher or equal to the filter
@@ -99,17 +110,17 @@ run_jellyfish <- function(data_frame = NULL,
 
 
   message("Creating readable fasta file...")
-  system(glue::glue("jellyfish dump {dataset_label}.jf > temp_jellyfish_dump"))# turn output into fasta
+  system(glue::glue("jellyfish dump {dataset_label}.jf > {dataset_label}_temp_jellyfish_dump"))# turn output into fasta
 
   on.exit(
-    if(file.exists("temp_jellyfish_dump")) unlink("temp_jellyfish_dump"), add = TRUE
+    if(file.exists(glue::glue("{dataset_label}_temp_jellyfish_dump"))) unlink(glue::glue("{dataset_label}_temp_jellyfish_dump")), add = TRUE
   )
 
   message("Renaming fasta file headers to contain the row number and the count of the k-mer...")
 
   #Load temporary fasta file
   #Read it with readr
-  fasta <- readr::read_lines("temp_jellyfish_dump", lazy = FALSE)
+  fasta <- readr::read_lines(glue::glue("{dataset_label}_temp_jellyfish_dump"), lazy = FALSE)
 
   #Check if given file is empty
   if (length(fasta) == 0) {
@@ -136,7 +147,7 @@ run_jellyfish <- function(data_frame = NULL,
 
 
   #If an output file is given save it into a .fasta file
-  if(!is.null(out)){
+  if(!is.null(output)){
     message("Saving renamed fasta file...")
 
     joined_fasta_file <- joined_fasta |>
@@ -146,9 +157,9 @@ run_jellyfish <- function(data_frame = NULL,
                           values_to = "fasta_line") |>
       dplyr::select(.data$fasta_line)
 
-    utils::write.table(joined_fasta_file, file = glue::glue("{out}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
+    utils::write.table(joined_fasta_file, file = glue::glue("{output}.fasta"), quote = FALSE, row.names = FALSE, col.names = FALSE)
 
-    if(file.exists(glue::glue("{dataset_label}.jf"))) file.rename(from = glue::glue("{dataset_label}.jf"), to = glue::glue("{out}.jf"))
+    if(file.exists(glue::glue("{dataset_label}.jf"))) file.rename(from = glue::glue("{dataset_label}.jf"), to = glue::glue("{output}.jf"))
 
   }
 

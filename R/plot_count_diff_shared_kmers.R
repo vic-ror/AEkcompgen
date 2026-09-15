@@ -6,7 +6,6 @@
 #' @param color_palette A color pallete from the scale_fill_gradientn function, default is "Set2".
 #' @param free_scale If the plots by labels should be free scale, put TRUE, or in the same scale, default.
 #' @param plot_title The title for the plot.
-#' @param path_db The path to save the .duckdb file, if none given it creates a temporary file.
 #'
 #' @return A daframe with the frequency modulus difference of different pairs of dataset labels.
 #' @export
@@ -29,8 +28,7 @@ plot_count_diff_shared_kmers <- function(shared_df,
                                          cut_off = NULL,
                                          color_palette = "Set2",
                                          free_scale = FALSE,
-                                         plot_title = "Modulus of Count Difference",
-                                         path_db = NULL) {
+                                         plot_title = "Modulus of Count Difference") {
 
 
     #Get each header in its own row to extract each kmer count

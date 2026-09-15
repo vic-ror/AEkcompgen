@@ -1,6 +1,6 @@
 #' Runs the Jellyfish histo function
 #' @param jf_file The .jf output file from jellyfish
-#' @param out The name of the file in which the histogram will be saved
+#' @param output The name of the file in which the histogram will be saved
 #'
 #' @return A histogram containing the k-mer frequency and count of the k-mers in the .jf file
 #' @export
@@ -13,7 +13,7 @@
 #' histo_file <- run_jellyfish_histo(temp_jf)
 #' # 3. View result
 #' print(histo_file)
-run_jellyfish_histo <- function(jf_file, out = NULL){
+run_jellyfish_histo <- function(jf_file, output = NULL){
   #Check if jellyfish is installed
   if (Sys.which("jellyfish") == "") {
     stop(
@@ -21,6 +21,11 @@ run_jellyfish_histo <- function(jf_file, out = NULL){
       Please check if it's installed and add it to your system's path",
       call. = FALSE
     )
+  }
+  #Check if .jf file is available in the given path
+  #Check if file exists in the given path
+  if(!file.exists(jf_file)){
+    stop("ERROR: .jf file not found in the given path.")
   }
 
   #Running jellyfish histo
@@ -35,13 +40,13 @@ run_jellyfish_histo <- function(jf_file, out = NULL){
     tidyr::separate(histo_file, sep = " ", into = c("kmer_freq", "count"))
 
   #If no name for output file is given delete it
-  if(is.null(out)){
+  if(is.null(output)){
       if(file.exists("temp.histo")) unlink("temp.histo")
   }
 
   #If output name is given, rename the output as the file name
   else{
-    if(file.exists("temp.histo")) file.rename(from = "temp.histo", to = glue::glue("{out}"))
+    if(file.exists("temp.histo")) file.rename(from = "temp.histo", to = glue::glue("{output}"))
   }
 
   return(histo_df)

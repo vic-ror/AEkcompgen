@@ -4,12 +4,12 @@
 \alias{run_jellyfish_histo}
 \title{Runs the Jellyfish histo function}
 \usage{
-run_jellyfish_histo(jf_file, out = NULL)
+run_jellyfish_histo(jf_file, output = NULL)
 }
 \arguments{
 \item{jf_file}{The .jf output file from jellyfish}
 
-\item{out}{The name of the file in which the histogram will be saved}
+\item{output}{The name of the file in which the histogram will be saved}
 }
 \value{
 A histogram containing the k-mer frequency and count of the k-mers in the .jf file

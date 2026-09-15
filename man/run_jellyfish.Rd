@@ -12,7 +12,7 @@ run_jellyfish(
   dataset_label,
   lower_count = NULL,
   upper_count = NULL,
-  out = NULL
+  output = NULL
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ run_jellyfish(
 
 \item{upper_count}{Don't output k-mers with count higher than this}
 
-\item{out}{Name for output fasta file}
+\item{output}{Name for output fasta file}
 }
 \value{
 A dataframe containing the counted kmers and their headers with the frequency information

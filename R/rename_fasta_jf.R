@@ -34,6 +34,13 @@ rename_fasta_jf <- function(fasta_file, dataset_label, out = NULL){
     stop("Error: The given fasta file is empty.")
   }
 
+   #Check if given dataset label has a _ in it
+   #_ would give an error later on
+   if(isTRUE(stringr::str_detect(dataset_label, "_"))){
+     stop("ERROR: dataset_label must not contain '_', since it will create problems in later functions, please rename it.")
+   }
+
+  #Remove the > and identify elements in the header/sequence
   fasta_df <- tibble::tibble(fasta) |>
     dplyr::mutate(is_header = stringr::str_detect(.data$fasta, "^>")) |>
     dplyr::mutate(group_id = cumsum(.data$is_header)) #identify the sequence with the header
@@ -46,6 +53,7 @@ rename_fasta_jf <- function(fasta_file, dataset_label, out = NULL){
     dplyr::rename(seq = .data$fasta) |>
     dplyr::select(.data$seq, .data$group_id)
 
+  #Rename header to contain elements
   joined_fasta <- dplyr::full_join(header, seq, by = "group_id", multiple = "all") |>
     dplyr::mutate(id = stringr::str_remove(.data$id, ">")) |>
     dplyr::mutate(nrow = dplyr::row_number()) |>
