@@ -47,7 +47,8 @@ library(AEkcompgen)
 ### (1) Read Processing: Trimming, filtering quality, removing contaminants, checking sequencing coverage and subsampling.
 
 First, in order to turn the sequencing .fastq into fairly comparable
-datasets read processing is required.
+datasets read processing is required. This part was designed to work
+with Illumnina short reads.
 
 ``` r
 library(AEkcompgen)
