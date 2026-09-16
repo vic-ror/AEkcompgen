@@ -46,7 +46,7 @@ run_jellyfish_histo <- function(jf_file, output = NULL){
 
   #If output name is given, rename the output as the file name
   else{
-    if(file.exists("temp.histo")) file.rename(from = "temp.histo", to = glue::glue("{output}"))
+    if(file.exists("temp.histo")) file.rename(from = "temp.histo", to = glue::glue("{output}.histo"))
   }
 
   return(histo_df)
