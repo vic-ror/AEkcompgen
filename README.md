@@ -131,6 +131,15 @@ well as select the shared and exclusive sequences.
     #Plot the histogram and save
     histo <- plot_histogram_kmer_freq(marked_dataset_1_histo,
                                       marked_dataset_2_histo)
+    
+    histo
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+``` r
+    
+    #Save plot
     save_plot(histo, file_name = "histogram",
               format = "pdf")
 #> png 
@@ -149,7 +158,7 @@ well as select the shared and exclusive sequences.
 #> Generating Venn Diagram...
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
 
 ``` r
     #Euler diagram
@@ -158,7 +167,7 @@ well as select the shared and exclusive sequences.
 #> Generating Euler Diagram...
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-3.png" width="100%" />
 
 ``` r
     #Upset plot (Recommended for more than 3 datasets)
@@ -166,7 +175,7 @@ well as select the shared and exclusive sequences.
 #> Generating UpsetPlot...
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-4.png" width="100%" />
 
 ``` r
     
@@ -184,7 +193,7 @@ well as select the shared and exclusive sequences.
 #> Making the plot...
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-4.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-5.png" width="100%" />
 
 ### (3) K-mer Clustering: Grouping k-mer sequences based on sequence similarity
 

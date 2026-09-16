@@ -136,6 +136,10 @@ Plot information from the counted k-mers, such as quantity of shared and exclusi
     #Plot the histogram and save
     histo <- plot_histogram_kmer_freq(marked_dataset_1_histo,
                                       marked_dataset_2_histo)
+    
+    histo
+    
+    #Save plot
     save_plot(histo, file_name = "histogram",
               format = "pdf")
     
