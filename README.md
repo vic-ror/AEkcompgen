@@ -21,7 +21,7 @@ k-mer counting and (3) k-mer clustering.
 Before installing it, note that some command line programs (check list
 below) should be installed for full use of the package.
 
-- [Trimommatic](https://github.com/usadellab/trimmomatic)
+- [Trimmomatic](https://github.com/usadellab/trimmomatic)
 - [BWA](https://github.com/lh3/BWA)
 - [samtools](https://github.com/samtools/samtools)
 - [jellyfish](https://github.com/gmarcais/jellyfish)
