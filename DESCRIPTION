@@ -1,9 +1,9 @@
 Package: AEkcompgen
 Title: Analysis of Exclusive (and Shared) k-mers for comparative genomics
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person("Victor Lucas", "Duarte Armani", , "victor.armanix@gmail.com", role = c("aut", "cre"))
-Description: A package to automatize the process of analysing genomic variability using k-mer counting and clustering.
+Description: A package to compare genomic data between two or more datasets, in order to find and quantify exclusive and shared sequences between them and enable visualization of these relations. This is done by using k-mers, subsequences of nucleotides that decrease the dataset complexity as well as allow for patter recognition and quantification.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,7 +26,8 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    UpSetR
+    UpSetR,
+    utils
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
