@@ -140,10 +140,8 @@ well as select the shared and exclusive sequences.
 ``` r
     
     #Save plot
-    save_plot(histo, file_name = "histogram",
-              format = "pdf")
-#> png 
-#>   2
+    #save_plot(histo, file_name = "histogram",
+    #          format = "pdf")
     
 
 #3. Plot k-mer sharing relation

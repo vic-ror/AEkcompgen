@@ -140,8 +140,8 @@ Plot information from the counted k-mers, such as quantity of shared and exclusi
     histo
     
     #Save plot
-    save_plot(histo, file_name = "histogram",
-              format = "pdf")
+    #save_plot(histo, file_name = "histogram",
+    #          format = "pdf")
     
 
 #3. Plot k-mer sharing relation
