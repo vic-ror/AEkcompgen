@@ -57,40 +57,36 @@ First, in order to turn the sequencing .fastq into fairly comparable datasets re
 ```{r}
 library(AEkcompgen)
 #1.Run trimommatic to trim reads.
-#run_trimmomatic(mode = "PE", input = c("", ""),
-#                out = c("", "",
-#                        "", ""))
+#run_trimmomatic(mode = "PE", input = c("dataset_1_1.fastq.gz", "dataset_1_2.fastq.gz"),
+#                out = c("dataset_1_1_paired.fastq.gz", "dataset_1_1_unpaired.fastq.gz",
+#                        "dataset_1_2_paired.fastq.gz", "dataset_1_2_unpaired.fastq.gz"))
 
-#run_trimmomatic(mode = "PE", input = c("", ""),
-#                out = c("", "",
-#                        "", ""))
 
 #2. Remove possible contaminated reads separately.
 #OBS: This step can also be done by the run_bwa function, by giving it the contaminant reference genome in the contaminant_ref variable.
-#run_bwa_remove_contaminant(input = c("", ""),
-#                           output = c("", ""),
-#                           ref = "")
+#run_bwa_remove_contaminant(input = c("dataset_1_1_paired.fastq.gz", "dataset_1_2_paired.fastq.gz"),
+#                           output = c("dataset_1_1_paired_rm_cont.fastq.gz", "dataset_1_2_paired_rm_cont.fastq.gz"),
+#                           ref = "cont_species_ref_genome.fasta")
 
 #3. Run bwa to map into reference genome.
-#run_bwa(input = c("",""),
-#        output = "", 
-#        ref = "",
-#        output_format = "")
-
+#run_bwa(input = c("dataset_1_1_paired_rm_cont.fastq.gz","dataset_1_2_paired_rm_cont.fastq.gz"),
+#        output = "dataset_1_mapped", 
+#        ref = "species_ref_genome.fasta",
+#        output_format = "bam")
 
 
 #4. Calculate mean read depth.
-#calculate_depth(input = "")
+#calculate_depth(input = "dataset_1_mapped.bam")
 
 #5. Subsample sequencing.
-#subsample_sequencing(input = "",
-#                     current_average_depth = ,
-#                     wanted_average_depth = ,
-#                     output = "")
+#subsample_sequencing(input = "dataset_1_mapped.bam",
+#                     current_average_depth = 50,
+#                     wanted_average_depth = 40,
+#                     output = "dataset_1_mapped_subsampled")
 
 #6. Turn .bam/.sam file into a fasta file, needed to run k-mer counter.
-#mapped_file_to_fasta(input = "",
-#                     output = "")
+#mapped_file_to_fasta(input = "dataset_1_mapped_subsampled.bam",
+#                     output = "dataset_1_mapped_subsampled")
 
 #OBS: Subsampling a sequencing file is an important step to allow a fair comparison between different datasets, since different seqiencing coverage can result in different results in k-mer analysis, taking consideration parameters such as k-mer count.
 

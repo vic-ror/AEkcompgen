@@ -10,7 +10,7 @@ plot_euler_kmers(
   path_db = NULL,
   dataset_label = NULL,
   color_pallete = "PuBuGn",
-  title_name = "Kmer distribution across datasets"
+  title_name = "K-mer distribution across datasets"
 )
 }
 \arguments{
