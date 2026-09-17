@@ -54,15 +54,8 @@ run_trimmomatic <- function(mode,
   input_col <- paste(input, collapse = " ")
   output_col <- paste(output, collapse = " ")
 
-  #Check adapters
-  if(is.null(adapter_path)){
-    if(mode == "PE"){
-      adapter_path = "TruSeq3-PE.fa"
 
-    }else if(mode == "SE"){
-      adapter_path = "TruSeq3-SE.fa"
-    }
-  }
+
 
   #Check if quantity of files is compatible with chosen mode
   if(mode == "PE"){
@@ -72,12 +65,15 @@ run_trimmomatic <- function(mode,
            call. = FALSE)
 
     }
-      #Check if file exists in the given path
+    #Check if file exists in the given path
     if(!all(file.exists(input))) {
         stop("ERROR: One or more Input .fastq files not found in the given path.")
       }
 
     message("Running Trimmomatic in paired-end mode...")
+    #Put adapters to remove
+    if(is.null(adapter_path)){
+        adapter_path = "TruSeq3-PE.fa"}
 
     }
 
@@ -93,6 +89,10 @@ run_trimmomatic <- function(mode,
       }
 
     message("Running Trimmomatic in single-end mode...")
+
+    #Put adapters to remove
+    if(is.null(adapter_path)){
+      adapter_path = "TruSeq3-SE.fa"}
 
     } else{
       stop(
