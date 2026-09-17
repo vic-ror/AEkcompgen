@@ -11,7 +11,8 @@ run_trimmomatic(
   output,
   minimun_read_length = 36,
   sliding_window_size = 4,
-  average_phred = 25
+  average_phred = 25,
+  adapter_path = NULL
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ run_trimmomatic(
 \item{sliding_window_size}{The sliding window size to verify average phred value, default is 4.}
 
 \item{average_phred}{The average phred value for the sliding window, default is 25, if the phred value drops below it the read is cut.}
+
+\item{adapter_path}{The path for the adapter used in sequencing to be removed from reads.
+\describe{Default is TruSeq3(Ideal for Hiseq/Miseq), Check trimmomatic documentation for more options}}
 }
 \description{
 Runs trimmomatic to verify read quality using the quality score of phred 33, standard for Illumina data, trim and separate paired and unpaired reads.
