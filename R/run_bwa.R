@@ -110,7 +110,7 @@ run_bwa <- function(input,
         #Sort to generate fastq with pairs ordered
         system(glue::glue("samtools sort -n {input}_removed_cont.bam > {input}_removed_cont_sorted.bam"))
 
-        message("Creating fastaq file from with reads that were not mapped in contaminant...")
+        message("Creating fastq file from with reads that were not mapped in contaminant...")
         system(glue::glue("samtools fastq -o {input}_rm_contaminant_ref.fastq.gz {input}_removed_cont_sorted.bam"))
         input_rm_cont <- glue::glue("{input}_rm_contaminant_ref.fastq.gz")
 

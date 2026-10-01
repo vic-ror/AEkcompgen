@@ -26,38 +26,38 @@ plot_euler_kmers <- function(kmer_sharing_relation,
                                 path_db = NULL,
                                 dataset_label = NULL,
                                 color_pallete = "PuBuGn",
-                                title_name = "Kmer distribution across datasets"){
- 
+                                title_name = "K-mer distribution across datasets"){
+
   #Checking the number of datasets in the relation list
   #Count dataset quantity
   num_datasets <- length(kmer_sharing_relation)
-  
+
   #Check if dataset_label (if given) has the same number of datasets as the datasets in dataset
   if(!is.null(dataset_label)){
     if (num_datasets != length(dataset_label)){
       stop("Error: Number or datasets in dataset and given list in dataset label is not the same")
     }
   }
-  
+
   #Check if dataset quantity is doable
   if(num_datasets > 4){
     stop("Error: Cannot plot more than 7 datasets in a Venn diagram. Pleace reduce the number of datasets")
   }
-  
+
   #Fit data to the euler diagram
   euler_list <- eulerr::euler(kmer_sharing_relation)
-  
+
   #If no label is list given, extract the name from the list
   if(is.null(dataset_label)){
     dataset_label <- names(kmer_sharing_relation)
   }
-  
+
   #Generate color pallete
   message("Generating color palette based on the number of datasets...")
-  
+
   #Generate num_datasets collors dynamically
   dynamic_colors <- grDevices::hcl.colors(n = num_datasets, palette = color_pallete)
-  
+
   #Create euler diagram
   message("Generating Euler Diagram...\n")
   euler_cd <- plot(euler_list,
@@ -65,7 +65,7 @@ plot_euler_kmers <- function(kmer_sharing_relation,
                    labels = dataset_label,
                    fills = list(fill = dynamic_colors, alpha = 0.6),
                    main = title_name)
-  
+
   return(euler_cd)
-  
+
 }

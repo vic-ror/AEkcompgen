@@ -19,7 +19,11 @@
 #' @param minimun_read_length Minimun read length to kept, default is 36.
 #' @param sliding_window_size The sliding window size to verify average phred value, default is 4.
 #' @param average_phred The average phred value for the sliding window, default is 25, if the phred value drops below it the read is cut.
-
+#' @param adapter_path The path for the adapter used in sequencing to be removed from reads.
+#' \describe{Default is TruSeq3(Ideal for Hiseq/Miseq), Check trimmomatic documentation for more options}
+#' @param leading Cut bases off the start of a read, if bellow the value given.
+#' @param trailing Cut bases off the end of a read, if bellow the value given.
+#'
 #' @importFrom rlang .data
 #' @export
 #'
@@ -36,7 +40,10 @@ run_trimmomatic <- function(mode,
                             output,
                             minimun_read_length = 36,
                             sliding_window_size = 4,
-                            average_phred = 25){
+                            average_phred = 25,
+                            adapter_path = NULL,
+                            leading = 3,
+                            trailing = 3){
   #Verify if trimmomatic is intalled and in users path
   if (Sys.which("trimmomatic") == "") {
     stop(
@@ -51,7 +58,7 @@ run_trimmomatic <- function(mode,
   input_col <- paste(input, collapse = " ")
   output_col <- paste(output, collapse = " ")
 
-  #Check if quanity of files is cmpatible with chosen mode
+  #Check if quantity of files is compatible with chosen mode
   if(mode == "PE"){
     #Check if the quantity of files/file names is compatible with the chosen mode
     if(length(input) != 2 || length(output) != 4){
@@ -59,12 +66,15 @@ run_trimmomatic <- function(mode,
            call. = FALSE)
 
     }
-      #Check if file exists in the given path
+    #Check if file exists in the given path
     if(!all(file.exists(input))) {
         stop("ERROR: One or more Input .fastq files not found in the given path.")
       }
 
     message("Running Trimmomatic in paired-end mode...")
+    #Put adapters to remove
+    if(is.null(adapter_path)){
+        adapter_path = "TruSeq3-PE.fa"}
 
     }
 
@@ -81,6 +91,10 @@ run_trimmomatic <- function(mode,
 
     message("Running Trimmomatic in single-end mode...")
 
+    #Put adapters to remove
+    if(is.null(adapter_path)){
+      adapter_path = "TruSeq3-SE.fa"}
+
     } else{
       stop(
         "ERROR: The paramater for mode given is invalid.\n
@@ -88,7 +102,7 @@ run_trimmomatic <- function(mode,
       )
     }
   #Run trimmomatic
-  system(glue::glue("trimmomatic {mode} -phred33 {input_col} {output_col} ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:{sliding_window_size}:{average_phred} MINLEN:{minimun_read_length}"))
+  system(glue::glue("trimmomatic {mode} -phred33 {input_col} {output_col} ILLUMINACLIP:{adapter_path}:2:30:10 LEADING:{leading} TRAILING:{trailing} SLIDINGWINDOW:{sliding_window_size}:{average_phred} MINLEN:{minimun_read_length}"))
 
 
 }

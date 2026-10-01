@@ -1,3 +1,4 @@
+
 #' Plots an histogram based on the k-mer count and frequency
 #' @param ... Dataframes from the mark_jellyfish histo function
 #' @param normalization_value A value to divide the frequency of k-mers, usually based on the coverage of the mapped reads.
@@ -59,7 +60,6 @@ plot_histogram_kmer_freq <- function(...,
       ggplot2::facet_wrap(~ .data$tag, scales = free_scale) +
       ggplot2::guides(fill= ggplot2::guide_legend(title="Label")) +
       ggplot2::scale_fill_brewer(palette = color_palette)
-
 
   }
 

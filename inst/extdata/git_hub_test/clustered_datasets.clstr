@@ -1,0 +1,207 @@
+>Cluster 0
+0	45nt, >dataset2_74_1... *
+1	45nt, >dataset2_50_1... at +/95.56%
+2	45nt, >dataset2_51_1... at +/95.56%
+3	45nt, >dataset2_108_1... at +/97.78%
+4	45nt, >dataset2_31_1... at +/97.78%
+>Cluster 1
+0	45nt, >dataset2_65_1... *
+1	45nt, >dataset2_67_1... at +/95.56%
+2	45nt, >dataset2_71_1... at +/97.78%
+3	45nt, >dataset2_100_1... at +/97.78%
+4	45nt, >dataset2_1_1... at +/95.56%
+>Cluster 2
+0	45nt, >dataset2_85_1... *
+1	45nt, >dataset2_47_1... at +/95.56%
+2	45nt, >dataset2_48_1... at +/97.78%
+3	45nt, >dataset2_40_1... at +/95.56%
+4	45nt, >dataset2_92_1... at +/97.78%
+>Cluster 3
+0	45nt, >dataset2_123_1... *
+1	45nt, >dataset2_118_1... at +/97.78%
+2	45nt, >dataset2_24_1... at -/95.56%
+3	45nt, >dataset2_87_1... at -/97.78%
+4	45nt, >dataset2_46_1... at -/95.56%
+>Cluster 4
+0	45nt, >dataset1_122_1... *
+1	45nt, >dataset1_51_1... at +/91.11%
+2	45nt, >dataset1_34_1... at +/95.56%
+3	45nt, >dataset1_130_1... at +/93.33%
+4	45nt, >dataset1_66_1... at +/91.11%
+5	45nt, >dataset2_57_2... at +/91.11%
+6	45nt, >dataset1_58_1... at +/91.11%
+7	45nt, >dataset1_17_1... at +/91.11%
+8	45nt, >dataset1_29_1... at +/91.11%
+9	45nt, >dataset1_35_1... at -/97.78%
+10	45nt, >dataset1_98_1... at +/95.56%
+11	45nt, >dataset1_95_1... at +/91.11%
+12	45nt, >dataset1_84_1... at +/91.11%
+>Cluster 5
+0	45nt, >dataset1_52_1... *
+1	45nt, >dataset1_86_1... at -/93.33%
+2	45nt, >dataset1_72_1... at +/91.11%
+3	45nt, >dataset1_7_1... at +/93.33%
+4	45nt, >dataset2_15_1... at +/95.56%
+5	45nt, >dataset1_18_1... at +/93.33%
+6	45nt, >dataset1_133_1... at +/95.56%
+7	45nt, >dataset2_93_1... at +/93.33%
+8	45nt, >dataset1_94_1... at -/93.33%
+9	45nt, >dataset1_54_1... at +/91.11%
+10	45nt, >dataset1_108_1... at -/91.11%
+11	45nt, >dataset1_136_1... at +/91.11%
+12	45nt, >dataset1_43_1... at -/93.33%
+13	45nt, >dataset1_138_1... at -/91.11%
+14	45nt, >dataset1_33_1... at +/95.56%
+15	45nt, >dataset1_63_1... at +/95.56%
+16	45nt, >dataset1_53_1... at +/95.56%
+17	45nt, >dataset2_107_1... at -/91.11%
+18	45nt, >dataset1_118_1... at +/95.56%
+19	45nt, >dataset1_128_1... at +/91.11%
+20	45nt, >dataset1_81_1... at +/95.56%
+21	45nt, >dataset1_77_1... at +/91.11%
+22	45nt, >dataset1_91_1... at +/93.33%
+>Cluster 6
+0	45nt, >dataset1_78_1... *
+1	45nt, >dataset1_75_1... at +/95.56%
+2	45nt, >dataset1_67_1... at -/97.78%
+3	45nt, >dataset1_13_1... at +/95.56%
+4	45nt, >dataset1_6_1... at +/91.11%
+5	45nt, >dataset1_74_1... at -/97.78%
+>Cluster 7
+0	45nt, >dataset1_37_1... *
+1	45nt, >dataset1_49_1... at -/95.56%
+2	45nt, >dataset1_57_1... at -/97.78%
+>Cluster 8
+0	45nt, >dataset1_68_1... *
+1	45nt, >dataset1_96_1... at +/95.56%
+2	45nt, >dataset1_61_1... at -/97.78%
+3	45nt, >dataset1_70_1... at +/95.56%
+4	45nt, >dataset1_90_1... at +/91.11%
+5	45nt, >dataset1_119_1... at +/91.11%
+6	45nt, >dataset1_124_1... at +/91.11%
+7	45nt, >dataset1_44_1... at +/91.11%
+8	45nt, >dataset1_115_1... at +/91.11%
+9	45nt, >dataset1_126_1... at +/91.11%
+>Cluster 9
+0	45nt, >dataset2_83_1... *
+1	45nt, >dataset2_97_1... at -/97.78%
+2	45nt, >dataset2_121_1... at +/95.56%
+3	45nt, >dataset2_29_1... at +/95.56%
+4	45nt, >dataset2_133_1... at -/97.78%
+>Cluster 10
+0	45nt, >dataset2_59_1... *
+1	45nt, >dataset2_111_1... at +/95.56%
+2	45nt, >dataset2_69_1... at +/97.78%
+>Cluster 11
+0	45nt, >dataset1_101_1... *
+1	45nt, >dataset1_134_1... at +/95.56%
+2	45nt, >dataset1_27_1... at +/91.11%
+3	45nt, >dataset1_41_1... at +/95.56%
+4	45nt, >dataset1_2_1... at +/91.11%
+5	45nt, >dataset2_139_2... at -/91.11%
+>Cluster 12
+0	45nt, >dataset2_138_1... *
+1	45nt, >dataset2_103_1... at -/95.56%
+2	45nt, >dataset2_63_1... at -/97.78%
+3	45nt, >dataset2_6_1... at +/97.78%
+4	45nt, >dataset2_44_1... at -/95.56%
+>Cluster 13
+0	45nt, >dataset2_134_1... *
+1	45nt, >dataset2_27_1... at +/97.78%
+2	45nt, >dataset2_104_1... at -/97.78%
+3	45nt, >dataset2_16_1... at -/95.56%
+4	45nt, >dataset2_12_1... at -/95.56%
+>Cluster 14
+0	45nt, >dataset1_65_1... *
+1	45nt, >dataset1_19_1... at +/91.11%
+2	45nt, >dataset1_105_1... at +/97.78%
+3	45nt, >dataset1_45_1... at -/95.56%
+4	45nt, >dataset1_60_1... at +/93.33%
+5	45nt, >dataset1_76_1... at +/97.78%
+>Cluster 15
+0	45nt, >dataset1_47_1... *
+1	45nt, >dataset1_25_1... at -/97.78%
+2	45nt, >dataset1_71_1... at +/95.56%
+3	45nt, >dataset1_59_1... at +/95.56%
+4	45nt, >dataset1_113_1... at -/97.78%
+>Cluster 16
+0	45nt, >dataset2_142_1... *
+1	45nt, >dataset2_11_1... at -/95.56%
+2	45nt, >dataset2_2_1... at -/95.56%
+3	45nt, >dataset2_84_1... at +/97.78%
+4	45nt, >dataset2_25_1... at -/97.78%
+>Cluster 17
+0	45nt, >dataset2_3_1... *
+1	45nt, >dataset2_39_1... at +/97.78%
+2	45nt, >dataset2_94_1... at +/97.78%
+3	45nt, >dataset2_53_1... at +/95.56%
+4	45nt, >dataset2_62_1... at +/95.56%
+>Cluster 18
+0	45nt, >dataset2_131_1... *
+1	45nt, >dataset2_79_1... at -/95.56%
+2	45nt, >dataset2_60_1... at -/97.78%
+3	45nt, >dataset2_34_1... at +/97.78%
+4	45nt, >dataset2_75_1... at -/91.11%
+5	45nt, >dataset2_102_1... at +/95.56%
+>Cluster 19
+0	45nt, >dataset2_81_1... *
+1	45nt, >dataset2_70_1... at -/97.78%
+>Cluster 20
+0	45nt, >dataset2_125_1... *
+1	45nt, >dataset2_78_1... at +/97.78%
+2	45nt, >dataset2_114_1... at -/95.56%
+3	45nt, >dataset2_76_1... at -/97.78%
+>Cluster 21
+0	45nt, >dataset1_22_1... *
+1	45nt, >dataset1_50_1... at +/91.11%
+>Cluster 22
+0	45nt, >dataset2_68_1... *
+1	45nt, >dataset2_77_1... at +/97.78%
+>Cluster 23
+0	45nt, >dataset2_88_1... *
+1	45nt, >dataset2_26_1... at +/97.78%
+2	45nt, >dataset2_124_1... at -/97.78%
+3	45nt, >dataset2_82_1... at -/95.56%
+>Cluster 24
+0	45nt, >dataset2_35_1... *
+1	45nt, >dataset2_137_1... at -/97.78%
+2	45nt, >dataset2_22_2... at -/97.78%
+>Cluster 25
+0	45nt, >dataset2_122_1... *
+>Cluster 26
+0	45nt, >dataset1_116_1... *
+1	45nt, >dataset1_104_1... at -/97.78%
+2	45nt, >dataset1_132_1... at +/95.56%
+3	45nt, >dataset1_111_1... at -/97.78%
+>Cluster 27
+0	45nt, >dataset2_56_17... *
+1	45nt, >dataset2_96_17... at +/97.78%
+2	45nt, >dataset2_43_17... at +/95.56%
+3	45nt, >dataset2_140_17... at -/95.56%
+4	45nt, >dataset2_128_17... at +/97.78%
+>Cluster 28
+0	45nt, >dataset1_20_1... *
+>Cluster 29
+0	45nt, >dataset1_87_1... *
+1	45nt, >dataset1_23_1... at -/97.78%
+2	45nt, >dataset1_73_1... at +/91.11%
+3	45nt, >dataset1_117_1... at +/95.56%
+>Cluster 30
+0	45nt, >dataset1_80_1... *
+>Cluster 31
+0	45nt, >dataset2_101_17... *
+>Cluster 32
+0	45nt, >dataset1_127_1... *
+1	45nt, >dataset1_103_1... at -/97.78%
+>Cluster 33
+0	45nt, >dataset2_45_1... *
+>Cluster 34
+0	45nt, >dataset1_93_1... *
+>Cluster 35
+0	45nt, >dataset2_32_1... *
+>Cluster 36
+0	45nt, >dataset2_115_1... *
+1	45nt, >dataset2_10_1... at +/95.56%
+2	45nt, >dataset2_4_1... at -/97.78%
+>Cluster 37
+0	45nt, >dataset2_129_1... *
