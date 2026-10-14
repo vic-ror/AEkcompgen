@@ -9,7 +9,7 @@ plot_histogram_kmer_freq(
   normalization_value = NULL,
   color_palette = "Set2",
   free_scale = FALSE,
-  plot_title = "K-mer count histogram"
+  plot_title = "K-mer frequency histogram"
 )
 }
 \arguments{
