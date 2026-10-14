@@ -39,7 +39,7 @@ retrieve_sequence <- function(clustered_df,
   duckdb::duckdb_register(con, "seq_table", seq_df) # seq df
 
   #Join data
-  joined_df <- dplyr::full_join(dplyr::tbl(con, "cluster_table"), dplyr::tbl(con, "seq_table"), by = "id")
+  joined_df <- dplyr::left_join(dplyr::tbl(con, "cluster_table"), dplyr::tbl(con, "seq_table"), by = "id")
 
   if(!is.null(fasta_file_name)){
     fasta_cluster <- joined_df |>
