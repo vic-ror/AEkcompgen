@@ -55,7 +55,7 @@ plot_histogram_kmer_freq <- function(...,
     histogram <- ggplot2::ggplot(binded_histo_list,  ggplot2::aes(x = as.numeric(.data$kmer_freq)/normalization_value, y = as.numeric(.data$count), fill = .data$tag)) +
       ggplot2::geom_area(alpha=0.8) +
       ggplot2::scale_y_log10(labels = scales::label_scientific()) +
-      ggplot2::labs(x = "Kmer frequency", y = "Quantity of dinstinct k-mers", title = plot_title) +
+      ggplot2::labs(x = "K-mer frequency", y = "Quantity of distinct k-mers", title = plot_title) +
       ggplot2::theme_bw() +
       ggplot2::facet_wrap(~ .data$tag, scales = free_scale) +
       ggplot2::guides(fill= ggplot2::guide_legend(title="Label")) +
@@ -68,7 +68,7 @@ plot_histogram_kmer_freq <- function(...,
     histogram <- ggplot2::ggplot(binded_histo_list,  ggplot2::aes(x = as.numeric(.data$kmer_freq), y = as.numeric(.data$count), fill = .data$tag)) +
       ggplot2::geom_area(alpha=0.8) +
       ggplot2::scale_y_log10(labels = scales::label_scientific()) +
-      ggplot2::labs(x = "Kmer frequency", y = "Quantity of dinstinct k-mers", title = plot_title) +
+      ggplot2::labs(x = "K-mer frequency", y = "Quantity of distinct k-mers", title = plot_title) +
       ggplot2::theme_bw() +
       ggplot2::facet_wrap(~ .data$tag, scales = free_scale) +
       ggplot2::guides(fill= ggplot2::guide_legend(title="Label")) +
