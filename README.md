@@ -145,7 +145,7 @@ well as select the shared and exclusive sequences.
   #Get relation
     kmer_sharing_list <- kmer_sharing_relation(dataset_1, dataset_2)
 #> duckdb is keeping downloaded extensions in a temporary directory:
-#> ℹ /tmp/RtmpMbnDuq/duckdb/extensions
+#> ℹ /tmp/RtmpIDjtng/duckdb/extensions
 #> This is removed when the R session ends, so extensions are re-downloaded each session.
 #> ℹ To keep them, point `options(duckdb.extension_directory =)` or the `DUCKDB_EXTENSION_DIRECTORY` environment variable at a permanent path.
 #> Extracting datasets...

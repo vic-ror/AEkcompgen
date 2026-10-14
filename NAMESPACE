@@ -3,7 +3,6 @@
 export(calculate_depth)
 export(cd_hit_info)
 export(cluster_sharing_relation)
-export(fasta_to_line)
 export(kmer_sharing_relation)
 export(load_clstr_file)
 export(load_fasta)

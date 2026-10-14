@@ -75,7 +75,7 @@ plot_cluster_1_seq <- function(cluster_1_seq_df,
       ggplot2::geom_line() +
       ggplot2::geom_point(size = 0.8) +
       ggplot2::facet_wrap(~label, labeller = ggplot2::as_labeller(corrected_labels)) +
-      ggplot2::labs(x = "K-count", y = "K-mer quantity", color = "Label", title = plot_title) +
+      ggplot2::labs(x = "K-mer count", y = "K-mer quantity", color = "Label", title = plot_title) +
       ggplot2::theme_bw() +
       ggplot2::scale_color_brewer(palette = color_palette)
 
